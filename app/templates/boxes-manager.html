@@ -1,0 +1,29 @@
+<div ng-controller="boxesManagerCtrl">
+	<div class="row">
+	  <div class="col-md-6 remote-control-container">  
+	  	<div class="row">
+		  	<button class="col-xs-4 custom-button-control" ng-click="startPulling()"><img src="/app/images/buttons/play-20.png"/></button>
+		    <button class="col-xs-4 custom-button-control" ng-click="stopPulling()"><img src="/app/images/buttons/stop-20.png"/></button>
+		</div>
+	  </div>
+	  <div class="col-md-6 remote-control-container">	
+	  	<div class="row">
+		  <input ng-model="timeInterval" type="text" class="form-control col-xs-5" id="ms-setter"required autofocus>
+		  <button class="col-xs-4 custom-button-control" ng-click="updateInterval(timeInterval)"><img src="/app/images/buttons/sinchronize-20.png"/></button>		    
+	  	</div>
+	  </div>
+	</div>  
+	<div class="row">
+	  <div class="logger-container gray-cool-border">
+		{{ loggerData.rect2985Fill }}
+		{{ loggerData.rect2985Border }}
+	  </div>
+
+	</div>  
+	<div class="row">
+	  <div class="statistics-container gray-cool-border">
+		{{ statistics.rect2985Fill }}
+		{{ statistics.rect2985Border }}
+	  </div>	
+	</div>  
+</div>
