@@ -4,6 +4,8 @@ padding: 1px;
 padding-top: 33px;}
 
 #app-container{
+
+    background-color: chenin;
     /*-webkit-box-shadow: inset 0px 0px 13px -1px rgba(50, 50, 50, 1);
     -moz-box-shadow:    inset 0px 0px 13px -1px  rgba(50, 50, 50, 1);
     box-shadow:         inset 0px 0px 13px -1px rgba(50, 50, 50, 1);
@@ -68,6 +70,15 @@ padding-top: 33px;}
 /*************/
 /* SVG BOXES */
 /*************/
+
+.description{
+padding: 30px;
+padding-left: 30px;
+padding-right: 30px;
+text-align: left;
+
+}
+
 
 .rect{
     border-color: solid 10px white;

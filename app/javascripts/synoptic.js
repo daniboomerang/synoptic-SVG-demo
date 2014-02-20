@@ -6,10 +6,10 @@ angular.module('synopticDemo', ['sticky'])
 
     return {
       pullDataFromServer : function() {
-        dataServerArray["rect2985Fill"] = 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
-        dataServerArray["rect2985Border"] = 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
+        dataServerArray["rectFill"] = 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
+        dataServerArray["rectBorder"] = 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
         $rootScope.$broadcast('dataServerChanged', dataServerArray);
-        console.log("pullDataFromServer", dataServerArray["rect2985Fill"], dataServerArray["rect2985Border"]); 
+        console.log("pullDataFromServer", dataServerArray["rectFill"], dataServerArray["rectBorder"]); 
       },
       getDataServer : function() {
         return dataServerArray;
@@ -31,65 +31,70 @@ angular.module('synopticDemo', ['sticky'])
 
   .controller('boxesManagerCtrl', function($scope, dataServerService) {  
     $scope.timeInterval = 1000;
+    $scope.loggerData = [];
+
+    logMessage('Synoptic Demo server running at => http://localhost:8000/ CTRL + C to shutdown');
+    logMessage('Initial interval => 1000ms');
     $scope.serverData = new Array();
-    $scope.loggerData = new Array();
     $scope.statistics = new Array();
+   
+
     $scope.$on('dataServerChanged', function(event, dataServerArray) {
       $sserverData = dataServerArray;
       $scope.$apply(function () {
-      //updateLogger
-      $scope.loggerData = dataServerArray;
-      //processStatistics
-      $scope.statistics = dataServerArray;
-      console.log("loggerData", $scope.loggerData);
-      console.log("Statistics", $scope.statistics);
+        //updateLogger
+        logMessage('Fill=> ' + dataServerArray["rectFill"]);
+        logMessage('Border=> ' + dataServerArray["rectBorder"]);
+        //processStatistics
+        $scope.statistics = dataServerArray;
       });
     });
 
     // The remote control
-
-    console.log("startPulling timeInterval", $scope.timeInterval);    
-    $scope.updateInterval = function(timeInterval) {    
+    $scope.updateInterval = function(timeInterval) {
+      logMessage('timeInterval = ', timeInterval);
+      logMessage('Synchronizing...');  
       $scope.timeInterval = timeInterval;
       this.stopPulling();
       this.startPulling();      
     };
 
     $scope.startPulling = function() {
-      console.log("startPulling BxCtrl");
+      logMessage('Pulling data from server...');  
       $scope.timer = setInterval(this.refresh, $scope.timeInterval);
     };
 
     $scope.stopPulling = function() {
+      logMessage('Stopping simulation...');  
       clearInterval($scope.timer);
     };  
 
     $scope.refresh = function() {  
-      console.log("refresh managementBoxesCtrl");
       dataServerService.pullDataFromServer();
-      /*$scope.updateView(dataServerService.getDataServer());*/
     };
 
-    // The logger
+    function getCurrentDate() {
+        // Today date time which will used to set as default date.
+        var todayDate = new Date();
+        todayDate = todayDate.getFullYear() + "-" +
+                       ("0" + (todayDate.getMonth() + 1)).slice(-2) + "-" +
+                       ("0" + todayDate.getDate()).slice(-2) + " " + ("0" + todayDate.getHours()).slice(-2) + ":" +
+                       ("0" + todayDate.getMinutes()).slice(-2);
 
-    $scope.updateLogger = function(dataServerArray) {   
-      console.log("updateLogger ", dataServerArray);
-      $scope.$on('dataServerChanged', function(event, dataServerArray) {
-        $scope.$apply(function () {
-          $scope.loggerData = dataServerArray;
-        });
-      }); 
+        return todayDate;
     };
 
-    // The statistics
-
-    $scope.processStatistics = function(dataServerArray) {   
-      console.log("processStatistics ", dataServerArray);
-      $scope.$on('dataServerChanged', function(event, dataServerArray) {
-        $scope.$apply(function () {
-          $scope.statistics = dataServerArray;
-        });
-      }); 
+    function logMessage(message){
+      var auxArray = [];
+      $scope.loggerData.push(getCurrentDate() + '# ' + 'root@synopticDemo> ' + message);
+      if ($scope.loggerData.length % 13 == 0){
+        for (var i=$scope.loggerData.length-1;i>=1;i--){
+          auxArray[i] = $scope.loggerData[i+1];
+        } 
+        $scope.loggerData = auxArray.slice(0,12);
+        $scope.loggerData.lenght = 0;
+      }
+      console.log(" logMessage is finishing");     
     };
   }) 
 
@@ -146,10 +151,10 @@ angular.module('synopticDemo', ['sticky'])
     };
   })
 
-  .directive('svgSimpleSwitch', function() {
+  .directive('boxesDescription', function() {
     return {
       restrict: 'E',
-      templateUrl: '/app/svgs/ARMSoCBlockDiagram.svg'
+      templateUrl: '/app/templates/boxes-description.html'
     };
   })
 
@@ -157,6 +162,13 @@ angular.module('synopticDemo', ['sticky'])
     return {
       restrict: 'E',
       templateUrl: '/app/templates/boxes-manager.html'
+    };
+  })
+
+  .directive('svgSimpleSwitch', function() {
+    return {
+      restrict: 'E',
+      templateUrl: '/app/svgs/ARMSoCBlockDiagram.svg'
     };
   })
 

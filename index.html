@@ -29,7 +29,8 @@
         <ul class="nav navbar-nav">
           <li><a href="#">synoptic-SVG-demo</a></li>
         </ul>
-        <button class="custom-button" style="padding-top:4px; padding-left:280px;" ng-click="previousSynoptic()"><img src="/app/images/buttons/previous-24.png"/></button>
+        <!--style="padding-top:4px; padding-left:280px;"-->  
+        <button class="custom-button" style="margin-top:3px;" ng-click="previousSynoptic()"><img src="/app/images/buttons/previous-24.png"/></button>
         <button class="custom-button" ng-click="nextSynoptic()"><img src="/app/images/buttons/next-24.png"/></button>
         <ul class="nav navbar-nav navbar-right">
           <a href="http://www.gmv.com"><img src="/app/images/logoGMV.png" alt="www.gmv.com/"/></a>
@@ -57,6 +58,8 @@
          <!-- BOXES -->
           <div ng-show="svgs[svgIndex] == synoptic.BOXES">
             <div class="view-container" ng-controller="svgBoxesCtrl"> 
+              <boxes-description></boxes-description>
+
                 <!-- Directive that embebes the SVG image -->
                 <svg-boxes></svg-boxes>
             </div>
