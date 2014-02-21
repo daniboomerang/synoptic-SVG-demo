@@ -162,8 +162,8 @@ angular.module('synopticDemo', ['sticky', 'ui.bootstrap'])
         
         // ProcessStatistics
         //Result mod 6
-        var resultMod6 = calculator.getOperationResult() % 8;
-        $scope.operationResults[resultMod6] += 1;
+        var resultMod8 = calculator.getOperationResult() % 8;
+        $scope.operationResults[resultMod8] += 1;
         // Recalculate percentages
         for (i=0;i<$scope.operationPercentages.length;i++){
           var percentage = Math.round(($scope.operationResults[i] / totalOperations) * 100);
@@ -224,12 +224,14 @@ angular.module('synopticDemo', ['sticky', 'ui.bootstrap'])
 
   .controller('svgSumCtrl', function($scope, calculator) {  
     $scope.operation = [];
+    $scope.resultMod8 = 0;
     $scope.operation['A']=0; $scope.operation['B']=0; $scope.operation['C']=0;
     $scope.operation['D']=0; $scope.operation['E']=0; $scope.operation['F']=0;
     $scope.operation['resultAB']=0; $scope.operation['resultCD']= 0; $scope.operation['resultEF']=0; $scope.operation['result']=0;     
     $scope.$on('operationPerformed', function(event, operationPerformed) {
       $scope.$apply(function () {
         $scope.operation = operationPerformed;
+        $scope.resultMod8 = calculator.getOperationResult() % 8;
       });
     }); 
   })
@@ -258,7 +260,7 @@ angular.module('synopticDemo', ['sticky', 'ui.bootstrap'])
   .directive('svgSum', function() {
     return {
       restrict: 'E',
-      templateUrl: '/app/svgs/sum.svg'
+      templateUrl: '/app/svgs/sumTest.svg'
     };
   })
 

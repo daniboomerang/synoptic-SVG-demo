@@ -21,14 +21,13 @@ box-shadow: 0 0 6px 5px #61020B;*/
 .synoptic-view{
   width: 65%;
   text-align:center;
-    background-color: #f5f5f5;
+  background-color: #f5f5f5;
 
 }
-/***********/
 
 .synoptic-manager {
   position: absolute;
-  height: 1180px;
+  height: 1030px;
   z-index: 1;
   right: 40px;
   width: 30%;
@@ -62,13 +61,16 @@ box-shadow: 0 0 6px 5px #61020B;*/
 }
 
 .statistics-sum-container, .logger-sum-container{
+  padding-right: 10px;
+  padding-top: 10px;
   width: 396px;
-  margin-top: 30px;
+  margin-top: 25px;
   background-color: #f5f5f5;
+
 }
 
 .statistics-sum-container{
-  height: 350px;
+  height: 310px;
 }
 
 .logger-sum-container{
