@@ -1,4 +1,4 @@
-angular.module('synopticDemo', ['sticky'])
+angular.module('synopticDemo', ['sticky', 'ui.bootstrap'])
 
   .controller('synopticCtrl', function($scope){
     $scope.synoptic = {BOXES: 'boxes', OTHER: 'other'};
@@ -57,6 +57,9 @@ angular.module('synopticDemo', ['sticky'])
         console.log("performing operation and result is ", operation.result);
         $rootScope.$broadcast('operationPerformed', operation);
       },
+      getOperationResult : function(){
+        return operation.result;
+      }
    };
   })
 
@@ -139,21 +142,36 @@ angular.module('synopticDemo', ['sticky'])
   .controller('sumManagerCtrl', function($scope, dataServerService, calculator) {  
     $scope.timeInterval = 1000;
     $scope.loggerData = [];
+    $scope.operationResults = [0,0,0,0,0,0,0,0];
+    $scope.operationPercentages = [0,0,0,0,0,0,0,0];
+    var totalOperations = 0;
     logMessage('Synoptic Sum server running at => http://localhost:8000/ CTRL + C to shutdown');
     logMessage('Initial interval => 1000ms');
     $scope.$on('randomsServerChanged', function(event, randomsServerArray) {
       calculator.performRandomOperation(randomsServerArray);
+      totalOperations += 1;
       $scope.$apply(function () {
-        var result = randomsServerArray["randomA"] + randomsServerArray["randomB"] + randomsServerArray["randomC"] + randomsServerArray["randomD"]+ randomsServerArray["randomE"] + randomsServerArray["randomF"];
-        //updateLogger
+        
+        //UpdateLogger
         logMessage('RandomA=> ' + randomsServerArray["randomA"]);
         logMessage('RandomB=> ' + randomsServerArray["randomB"]);
         logMessage('RandomC=> ' + randomsServerArray["randomC"]);
         logMessage('RandomD=> ' + randomsServerArray["randomD"]);
         logMessage('RandomE=> ' + randomsServerArray["randomE"]);
         logMessage('RandomF=> ' + randomsServerArray["randomF"]);
-        //processStatistics
-        //* TO  DO */
+        
+        // ProcessStatistics
+        //Result mod 6
+        var resultMod6 = calculator.getOperationResult() % 8;
+        $scope.operationResults[resultMod6] += 1;
+        // Recalculate percentages
+        for (i=0;i<$scope.operationPercentages.length;i++){
+          var percentage = Math.round(($scope.operationResults[i] / totalOperations) * 100);
+          $scope.operationPercentages[i] = percentage;
+        }
+        $scope.operationPercentages.sort(function compareNumbers(a, b) {
+          return a - b;
+        });
       });
     });
 
@@ -201,7 +219,6 @@ angular.module('synopticDemo', ['sticky'])
         $scope.loggerData = auxArray.slice(0,12);
         $scope.loggerData.lenght = 0;
       }
-      console.log(" logMessage is finishing");     
     };
   })
 
@@ -211,15 +228,8 @@ angular.module('synopticDemo', ['sticky'])
     $scope.operation['D']=0; $scope.operation['E']=0; $scope.operation['F']=0;
     $scope.operation['resultAB']=0; $scope.operation['resultCD']= 0; $scope.operation['resultEF']=0; $scope.operation['result']=0;     
     $scope.$on('operationPerformed', function(event, operationPerformed) {
-      console.log("svgSumCtrl $on.operationPerformed");     
       $scope.$apply(function () {
-        console.log("svgSumCtrl $apply", operationPerformed.result);     
         $scope.operation = operationPerformed;
-        console.log(operationPerformed.result);
-        /*$scope.operation['randomA'] = operationPerformed.randomA; $scope.operation['randomB'] = operationPerformed.randomB;
-        $scope.operation['randomC'] = operationPerformed.randomC; $scope.operation['randomD'] = operationPerformed.randomD;
-        $scope.operation['randomE'] = operationPerformed.randomE; $scope.operation['randomF'] = operationPerformed.randomF;*/
-        console.log("svgSumCtrl $scope.operation.result", $scope.operation.result);     
       });
     }); 
   })

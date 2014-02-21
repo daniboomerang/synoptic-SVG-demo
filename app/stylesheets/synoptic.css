@@ -38,7 +38,6 @@ padding-top: 33px;}
 /*+********************/
 /* PURE STYLE */
 /*+********************/
-#button{padding: 25px;}
 
 .red-cool-border{
     -webkit-border-radius: 5px 5px 5px 5px;
@@ -79,9 +78,23 @@ text-align: left;
 
 }
 
+/* BARS STATISTICS */
+.progress.vertical {
+    position: relative;
+    width: 20px;
+    min-height: 240px;
+    float: left;
+    margin-right: 20px;
+    background: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    border: none;
+}
 
-.rect{
-    border-color: solid 10px white;
-    width: 10px;
-    height: 10px;
+.bars-container{
+    padding-left: 20px;
+    padding-right: 30px;
+    width: 400px;
+    height: 200px;
 }

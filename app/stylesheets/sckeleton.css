@@ -60,6 +60,25 @@ box-shadow: 0 0 6px 5px #61020B;*/
   font-size: 12px;
   padding: 10px;
 }
+
+.statistics-sum-container, .logger-sum-container{
+  width: 396px;
+  margin-top: 30px;
+  background-color: #f5f5f5;
+}
+
+.statistics-sum-container{
+  height: 350px;
+}
+
+.logger-sum-container{
+  text-align: left;
+  background-color: black;
+  color: green; 
+  font-size: 12px;
+  padding: 10px;
+}
+
 .remote-control-container{
   height: 20px;
 }
