@@ -260,7 +260,7 @@ angular.module('synopticDemo', ['sticky', 'ui.bootstrap'])
   .directive('svgSum', function() {
     return {
       restrict: 'E',
-      templateUrl: '/app/svgs/sumTest.svg'
+      templateUrl: '/app/svgs/sum.svg'
     };
   })
 
