@@ -30,8 +30,8 @@
           <li><a href="#">synoptic-SVG-demo</a></li>
         </ul>
         <!--style="padding-top:4px; padding-left:280px;"-->  
-        <button class="custom-button" style="margin-top:3px;" ng-click="previousSynoptic()"><img src="/app/images/buttons/previous-24.png"/></button>
-        <button class="custom-button" ng-click="nextSynoptic()"><img src="/app/images/buttons/next-24.png"/></button>
+        <button class="custom-button" style="margin-top:2px;" ng-click="previousSynoptic()"><img src="/app/images/buttons/previous-24.png"/></button>
+        <button class="custom-button" style="margin-top:2px;" ng-click="nextSynoptic()"><img src="/app/images/buttons/next-24.png"/></button>
         <ul class="nav navbar-nav navbar-right">
           <a href="http://www.gmv.com"><img src="/app/images/logoGMV.png" alt="www.gmv.com/"/></a>
         </ul>
@@ -49,7 +49,7 @@
               <boxes-manager></boxes-manager>
             </div> 
             <div ng-show="svgs[svgIndex] == synoptic.OTHER">
-              <simple-switch-manager></simple-switch-manager>
+              <sum-manager></sum-manager>
             </div> 
           </div>
           </div>
@@ -59,20 +59,20 @@
           <div ng-show="svgs[svgIndex] == synoptic.BOXES">
             <div class="view-container" ng-controller="svgBoxesCtrl"> 
               <boxes-description></boxes-description>
-
-                <!-- Directive that embebes the SVG image -->
-                <svg-boxes></svg-boxes>
+              <!-- Directive that embebes the SVG image -->
+              <svg-boxes></svg-boxes>
             </div>
           </div>
           <!-- BOXES -->
-          <!-- SIMPLE SWITCH -->
+          <!-- SUM -->
           <div ng-show="svgs[svgIndex] == synoptic.OTHER">
-            <div id="view-container" ng-controller="simpleSwitchCtrl"> 
-                <!-- Directive that embebes the SVG image -->
-                <svg-simple-switch></svg-simple-switch>
+            <div id="view-container" ng-controller="svgSumCtrl"> 
+              <sum-description></sum-description>
+              <!-- Directive that embebes the SVG image -->
+              <svg-sum></svg-sum>
             </div>
           </div>
-          <!-- SIMPLE SWITCH -->
+          <!-- SUM -->
         </div>
       </div>
     </div>

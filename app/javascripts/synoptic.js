@@ -1,22 +1,5 @@
 angular.module('synopticDemo', ['sticky'])
 
-  .service('dataServerService', function ($rootScope) {
-    var dataServerArray = new Array(); 
-        console.log("dataServerService dataServerArray", dataServerArray); 
-
-    return {
-      pullDataFromServer : function() {
-        dataServerArray["rectFill"] = 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
-        dataServerArray["rectBorder"] = 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
-        $rootScope.$broadcast('dataServerChanged', dataServerArray);
-        console.log("pullDataFromServer", dataServerArray["rectFill"], dataServerArray["rectBorder"]); 
-      },
-      getDataServer : function() {
-        return dataServerArray;
-      }
-   };
-  })
-  
   .controller('synopticCtrl', function($scope){
     $scope.synoptic = {BOXES: 'boxes', OTHER: 'other'};
     $scope.svgs = ['boxes', 'other'];
@@ -29,30 +12,75 @@ angular.module('synopticDemo', ['sticky'])
     }
   })
 
+  .service('dataServerService', function ($rootScope) {
+    var dataServerArray = new Array(); 
+    var randomsServerArray = new Array(); 
+
+    return {
+      pullDataFromServer : function() {
+        dataServerArray["rectFill"] = 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
+        dataServerArray["rectBorder"] = 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
+        $rootScope.$broadcast('dataServerChanged', dataServerArray);
+      },
+      pullRandomsFromServer : function() {
+        randomsServerArray["randomA"] = Math.floor((Math.random()*100)+1);
+        randomsServerArray["randomB"] = Math.floor((Math.random()*100)+1);
+        randomsServerArray["randomC"] = Math.floor((Math.random()*100)+1);
+        randomsServerArray["randomD"] = Math.floor((Math.random()*100)+1);
+        randomsServerArray["randomE"] = Math.floor((Math.random()*100)+1);
+        randomsServerArray["randomF"] = Math.floor((Math.random()*100)+1);
+        $rootScope.$broadcast('randomsServerChanged', randomsServerArray);
+      },
+      getDataServer : function() {
+        return randomsServerArray;
+      }
+   };
+  })
+
+ .service('calculator', function ($rootScope) {
+    var operation = {
+      A: 0, B: 0, C: 0, D: 0, E: 0, F: 0,
+      resultAB: 0,
+      resultCD: 0,
+      resultEF: 0,
+      result: 0, 
+    }    
+    return {
+      performRandomOperation : function(randomsServerArray) {
+        operation.A = randomsServerArray["randomA"]; operation.B = randomsServerArray["randomB"];
+        operation.C = randomsServerArray["randomC"]; operation.D = randomsServerArray["randomD"];
+        operation.E = randomsServerArray["randomA"]; operation.F = randomsServerArray["randomA"];
+        operation.resultAB = randomsServerArray["randomA"] + randomsServerArray["randomB"];
+        operation.resultCD = randomsServerArray["randomC"] + randomsServerArray["randomD"];
+        operation.resultEF = randomsServerArray["randomE"] + randomsServerArray["randomF"];
+        operation.result = operation.resultAB + operation.resultCD + operation.resultEF;
+        console.log("performing operation and result is ", operation.result);
+        $rootScope.$broadcast('operationPerformed', operation);
+      },
+   };
+  })
+
   .controller('boxesManagerCtrl', function($scope, dataServerService) {  
     $scope.timeInterval = 1000;
     $scope.loggerData = [];
-
-    logMessage('Synoptic Demo server running at => http://localhost:8000/ CTRL + C to shutdown');
+    logMessage('Synoptic Boxes server running at => http://localhost:8000/ CTRL + C to shutdown');
     logMessage('Initial interval => 1000ms');
-    $scope.serverData = new Array();
-    $scope.statistics = new Array();
-   
-
     $scope.$on('dataServerChanged', function(event, dataServerArray) {
-      $sserverData = dataServerArray;
       $scope.$apply(function () {
         //updateLogger
         logMessage('Fill=> ' + dataServerArray["rectFill"]);
         logMessage('Border=> ' + dataServerArray["rectBorder"]);
         //processStatistics
-        $scope.statistics = dataServerArray;
+        //* TO  DO */
+        if (dataServerArray["rectFill"] == dataServerArray["rectBorder"]){
+          logMessage("Match fill and border => " + dataServerArray["rectBorder"]);          
+        }
       });
     });
 
     // The remote control
     $scope.updateInterval = function(timeInterval) {
-      logMessage('timeInterval = ', timeInterval);
+      logMessage('timermeInterval = ' + timeInterval);
       logMessage('Synchronizing...');  
       $scope.timeInterval = timeInterval;
       this.stopPulling();
@@ -108,40 +136,92 @@ angular.module('synopticDemo', ['sticky'])
     }); 
   })
 
-  .controller('simpleSwitchCtrl', function($scope, dataServerService) {  
+  .controller('sumManagerCtrl', function($scope, dataServerService, calculator) {  
     $scope.timeInterval = 1000;
-    $scope.serverData = new Array();
-    $scope.$on('dataServerChanged', function(event, dataServerArray) {$scope.serverData = dataServerArray;}); 
+    $scope.loggerData = [];
+    logMessage('Synoptic Sum server running at => http://localhost:8000/ CTRL + C to shutdown');
+    logMessage('Initial interval => 1000ms');
+    $scope.$on('randomsServerChanged', function(event, randomsServerArray) {
+      calculator.performRandomOperation(randomsServerArray);
+      $scope.$apply(function () {
+        var result = randomsServerArray["randomA"] + randomsServerArray["randomB"] + randomsServerArray["randomC"] + randomsServerArray["randomD"]+ randomsServerArray["randomE"] + randomsServerArray["randomF"];
+        //updateLogger
+        logMessage('RandomA=> ' + randomsServerArray["randomA"]);
+        logMessage('RandomB=> ' + randomsServerArray["randomB"]);
+        logMessage('RandomC=> ' + randomsServerArray["randomC"]);
+        logMessage('RandomD=> ' + randomsServerArray["randomD"]);
+        logMessage('RandomE=> ' + randomsServerArray["randomE"]);
+        logMessage('RandomF=> ' + randomsServerArray["randomF"]);
+        //processStatistics
+        //* TO  DO */
+      });
+    });
 
-    console.log("startPulling timeInterval", $scope.timeInterval);    
-    $scope.updateInterval = function(timeInterval) {    
+    // The remote control
+    $scope.updateInterval = function(timeInterval) {
+      logMessage('timermeInterval = ' + timeInterval);
+      logMessage('Synchronizing...');  
       $scope.timeInterval = timeInterval;
       this.stopPulling();
       this.startPulling();      
     };
 
     $scope.startPulling = function() {
-      console.log("startPulling BxCtrl");
+      logMessage('Pulling data from server...');  
       $scope.timer = setInterval(this.refresh, $scope.timeInterval);
     };
 
     $scope.stopPulling = function() {
+      logMessage('Stopping simulation...');  
       clearInterval($scope.timer);
     };  
 
     $scope.refresh = function() {  
-      console.log("refresh BxCtrl");
-      dataServerService.pullDataFromServer();
-      $scope.updateView(dataServerService.getDataServer());
+      dataServerService.pullRandomsFromServer();
     };
 
-    $scope.updateView = function(dataServerArray) {   
-          console.log("updateView BxCtrl", dataServerArray);
- 
-      $scope.$apply(function () {
-        $scope.serverData = dataServerArray;
-      });
+    function getCurrentDate() {
+        // Today date time which will used to set as default date.
+        var todayDate = new Date();
+        todayDate = todayDate.getFullYear() + "-" +
+                       ("0" + (todayDate.getMonth() + 1)).slice(-2) + "-" +
+                       ("0" + todayDate.getDate()).slice(-2) + " " + ("0" + todayDate.getHours()).slice(-2) + ":" +
+                       ("0" + todayDate.getMinutes()).slice(-2);
+
+        return todayDate;
     };
+
+    function logMessage(message){
+      var auxArray = [];
+      $scope.loggerData.push(getCurrentDate() + '# ' + 'root@synopticDemo> ' + message);
+      if ($scope.loggerData.length % 13 == 0){
+        for (var i=$scope.loggerData.length-1;i>=1;i--){
+          auxArray[i] = $scope.loggerData[i+1];
+        } 
+        $scope.loggerData = auxArray.slice(0,12);
+        $scope.loggerData.lenght = 0;
+      }
+      console.log(" logMessage is finishing");     
+    };
+  })
+
+  .controller('svgSumCtrl', function($scope, calculator) {  
+    $scope.operation = [];
+    $scope.operation['A']=0; $scope.operation['B']=0; $scope.operation['C']=0;
+    $scope.operation['D']=0; $scope.operation['E']=0; $scope.operation['F']=0;
+    $scope.operation['resultAB']=0; $scope.operation['resultCD']= 0; $scope.operation['resultEF']=0; $scope.operation['result']=0;     
+    $scope.$on('operationPerformed', function(event, operationPerformed) {
+      console.log("svgSumCtrl $on.operationPerformed");     
+      $scope.$apply(function () {
+        console.log("svgSumCtrl $apply", operationPerformed.result);     
+        $scope.operation = operationPerformed;
+        console.log(operationPerformed.result);
+        /*$scope.operation['randomA'] = operationPerformed.randomA; $scope.operation['randomB'] = operationPerformed.randomB;
+        $scope.operation['randomC'] = operationPerformed.randomC; $scope.operation['randomD'] = operationPerformed.randomD;
+        $scope.operation['randomE'] = operationPerformed.randomE; $scope.operation['randomF'] = operationPerformed.randomF;*/
+        console.log("svgSumCtrl $scope.operation.result", $scope.operation.result);     
+      });
+    }); 
   })
 
   .directive('svgBoxes', function() {
@@ -165,17 +245,24 @@ angular.module('synopticDemo', ['sticky'])
     };
   })
 
-  .directive('svgSimpleSwitch', function() {
+  .directive('svgSum', function() {
     return {
       restrict: 'E',
-      templateUrl: '/app/svgs/ARMSoCBlockDiagram.svg'
+      templateUrl: '/app/svgs/sum.svg'
     };
   })
 
-  .directive('simpleSwitchMonitor', function() {
+  .directive('sumDescription', function() {
     return {
       restrict: 'E',
-      templateUrl: '/app/templates/simple-switch-monitor.html'
+      templateUrl: '/app/templates/sum-description.html'
+    };
+  })
+
+  .directive('sumManager', function() {
+    return {
+      restrict: 'E',
+      templateUrl: '/app/templates/sum-manager.html'
     };
   })
 
