@@ -65,6 +65,7 @@ angular.module('synopticDemo', ['sticky', 'ui.bootstrap'])
 
   .controller('boxesManagerCtrl', function($scope, dataServerService) {  
     $scope.timeInterval = 1000;
+    const LOGGER_RANGE = 13;
     $scope.loggerData = [];
     logMessage('Synoptic Boxes server running at => http://localhost:8000/ CTRL + C to shutdown');
     logMessage('Initial interval => 1000ms');
@@ -116,14 +117,13 @@ angular.module('synopticDemo', ['sticky', 'ui.bootstrap'])
     };
 
     function logMessage(message){
-      const LOG_LENGTH = 13;
       var auxArray = [];
       $scope.loggerData.push(getCurrentDate() + '# ' + 'root@synopticDemo> ' + message);
-      if ($scope.loggerData.length % LOG_LENGTH == 0){
+      if ($scope.loggerData.length % LOGGER_RANGE == 0){
         for (var i=$scope.loggerData.length-1;i>=1;i--){
           auxArray[i] = $scope.loggerData[i+1];
         } 
-        $scope.loggerData = auxArray.slice(0,LOG_LENGTH-1);
+        $scope.loggerData = auxArray.slice(0,LOGGER_RANGE-1);
         $scope.loggerData.lenght = 0;
       }
       console.log(" logMessage is finishing");     
@@ -155,9 +155,8 @@ angular.module('synopticDemo', ['sticky', 'ui.bootstrap'])
     var totalOperations = 0;
     
     // Logger
-    const LOGGER_RANGE = 13
+    const LOGGER_RANGE = 13;
     $scope.loggerData = [];
-
     logMessage('Synoptic Sum server running at => http://localhost:8000/ CTRL + C to shutdown');
     logMessage('Initial interval => 1000ms');
 
@@ -231,9 +230,10 @@ angular.module('synopticDemo', ['sticky', 'ui.bootstrap'])
         for (var i=$scope.loggerData.length-1;i>=1;i--){
           auxArray[i] = $scope.loggerData[i+1];
         } 
-        $scope.loggerData = auxArray.slice(0,LOGGER_RANGE);
+        $scope.loggerData = auxArray.slice(0,LOGGER_RANGE-1);
         $scope.loggerData.lenght = 0;
       }
+      console.log(" logMessage is finishing");     
     };
 
     function initArrayToZero(length){
