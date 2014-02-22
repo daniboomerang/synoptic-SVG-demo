@@ -453,10 +453,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.9899495"
-     inkscape:cx="653.14735"
-     inkscape:cy="375.08921"
+     inkscape:cx="410.71074"
+     inkscape:cy="-190.59621"
      inkscape:document-units="px"
-     inkscape:current-layer="g3143"
+     inkscape:current-layer="layer1-2"
      showgrid="false"
      inkscape:window-width="1280"
      inkscape:window-height="756"
@@ -3012,14 +3012,6 @@
                sodipodi:role="line">{{ operation.A }}</tspan></text>
         </g>
       </g>
-      <rect
-         style="fill:#756d4d;fill-opacity:1;stroke:#2900ef;stroke-opacity:1"
-         id="rect15663"
-         width="186.87822"
-         height="179.80716"
-         x="-37.375645"
-         y="1025.0171"
-         transform="translate(26.560648,-40.785165)" />
       <text
          xml:space="preserve"
          style="font-size:16.69885445px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
