@@ -1,9 +1,9 @@
 angular.module('synopticDemo', ['sticky', 'ui.bootstrap'])
 
   .controller('synopticCtrl', function($scope){
-    $scope.synoptic = {BOXES: 'boxes', OTHER: 'other'};
-    $scope.svgs = ['boxes', 'other'];
-    $scope.svgIndex = 0;
+    $scope.synoptic = {BOXES: 'boxes', OTHER: 'sum'};
+    $scope.svgs = ['boxes', 'sum'];
+    $scope.svgIndex = 1;
     $scope.previousSynoptic = function() {
       $scope.svgIndex = Math.abs($scope.svgIndex - 1) % $scope.svgs.length;
     }
@@ -116,13 +116,14 @@ angular.module('synopticDemo', ['sticky', 'ui.bootstrap'])
     };
 
     function logMessage(message){
+      const LOG_LENGTH = 13;
       var auxArray = [];
       $scope.loggerData.push(getCurrentDate() + '# ' + 'root@synopticDemo> ' + message);
-      if ($scope.loggerData.length % 13 == 0){
+      if ($scope.loggerData.length % LOG_LENGTH == 0){
         for (var i=$scope.loggerData.length-1;i>=1;i--){
           auxArray[i] = $scope.loggerData[i+1];
         } 
-        $scope.loggerData = auxArray.slice(0,12);
+        $scope.loggerData = auxArray.slice(0,LOG_LENGTH-1);
         $scope.loggerData.lenght = 0;
       }
       console.log(" logMessage is finishing");     
@@ -139,15 +140,28 @@ angular.module('synopticDemo', ['sticky', 'ui.bootstrap'])
     }); 
   })
 
-  .controller('sumManagerCtrl', function($scope, dataServerService, calculator) {  
+  .controller('sumManagerCtrl', function($scope, dataServerService, calculator) {
     $scope.timeInterval = 1000; 
-    $scope.loggerData = [];
-    $scope.operationResults = [0,0,0,0,0,0,0,0];
-    $scope.operationPercentages = [0,0,0,0,0,0,0,0];
-    $scope.resultMod8 = 0;
+
+    // Statistics
+    const MOD_APPLIED = 8;
+    $scope.statisticsLenght = MOD_APPLIED;
+    $scope.resultsOcurrencies = initArrayToZero(MOD_APPLIED);
+    $scope.operationPercentages = [{number:0, percentage:0},{number:1, percentage:0},{number:2, percentage:0},
+                                  {number:3, percentage:0},{number:4, percentage:0},{number:5, percentage:0},
+                                  {number:4, percentage:0},{number:7, percentage:0}];
+    $scope.result = 0;
+    $scope.resultAppliedMOD = $scope.result % MOD_APPLIED;
     var totalOperations = 0;
+    
+    // Logger
+    const LOGGER_RANGE = 13
+    $scope.loggerData = [];
+
     logMessage('Synoptic Sum server running at => http://localhost:8000/ CTRL + C to shutdown');
     logMessage('Initial interval => 1000ms');
+
+    /* Listening changes on dataServer */
     $scope.$on('randomsServerChanged', function(event, randomsServerArray) {
       calculator.performRandomOperation(randomsServerArray);
       totalOperations += 1;
@@ -160,18 +174,18 @@ angular.module('synopticDemo', ['sticky', 'ui.bootstrap'])
         logMessage('RandomD=> ' + randomsServerArray["randomD"]);
         logMessage('RandomE=> ' + randomsServerArray["randomE"]);
         logMessage('RandomF=> ' + randomsServerArray["randomF"]);
-        
         // ProcessStatistics
-        //Result mod 8
-        $scope.resultMod8 = calculator.getOperationResult() % 8;
-        $scope.operationResults[$scope.resultMod8] += 1;
+        // Result mod MOD_APPLIED
+        $scope.result = calculator.getOperationResult();
+        $scope.resultAppliedMOD = $scope.result % MOD_APPLIED;
+        $scope.resultsOcurrencies[$scope.resultAppliedMOD] += 1;
         // Recalculate percentages
         for (i=0;i<$scope.operationPercentages.length;i++){
-          var percentage = Math.round(($scope.operationResults[i] / totalOperations) * 100);
-          $scope.operationPercentages[i] = percentage;
+          var percentage = Math.round(($scope.resultsOcurrencies[i] / totalOperations) * 100);
+          $scope.operationPercentages[i] = {number: i, percentage: percentage};
         }
-        $scope.operationPercentages.sort(function compareNumbers(a, b) {
-          return a - b;
+        $scope.operationPercentages.sort(function comparePercentages(a, b) {
+          return b.percentage - a.percentage;
         });
       });
     });
@@ -213,13 +227,21 @@ angular.module('synopticDemo', ['sticky', 'ui.bootstrap'])
     function logMessage(message){
       var auxArray = [];
       $scope.loggerData.push(getCurrentDate() + '# ' + 'root@synopticDemo> ' + message);
-      if ($scope.loggerData.length % 13 == 0){
+      if ($scope.loggerData.length % LOGGER_RANGE == 0){
         for (var i=$scope.loggerData.length-1;i>=1;i--){
           auxArray[i] = $scope.loggerData[i+1];
         } 
-        $scope.loggerData = auxArray.slice(0,12);
+        $scope.loggerData = auxArray.slice(0,LOGGER_RANGE);
         $scope.loggerData.lenght = 0;
       }
+    };
+
+    function initArrayToZero(length){
+      var array = [];
+      for (var i=0;i<length;i++){
+        array[i] = 0;
+      } 
+      return array;
     };
   })
 
