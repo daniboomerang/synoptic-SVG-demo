@@ -140,10 +140,11 @@ angular.module('synopticDemo', ['sticky', 'ui.bootstrap'])
   })
 
   .controller('sumManagerCtrl', function($scope, dataServerService, calculator) {  
-    $scope.timeInterval = 1000;
+    $scope.timeInterval = 1000; 
     $scope.loggerData = [];
     $scope.operationResults = [0,0,0,0,0,0,0,0];
     $scope.operationPercentages = [0,0,0,0,0,0,0,0];
+    $scope.resultMod8 = 0;
     var totalOperations = 0;
     logMessage('Synoptic Sum server running at => http://localhost:8000/ CTRL + C to shutdown');
     logMessage('Initial interval => 1000ms');
@@ -161,9 +162,9 @@ angular.module('synopticDemo', ['sticky', 'ui.bootstrap'])
         logMessage('RandomF=> ' + randomsServerArray["randomF"]);
         
         // ProcessStatistics
-        //Result mod 6
-        var resultMod8 = calculator.getOperationResult() % 8;
-        $scope.operationResults[resultMod8] += 1;
+        //Result mod 8
+        $scope.resultMod8 = calculator.getOperationResult() % 8;
+        $scope.operationResults[$scope.resultMod8] += 1;
         // Recalculate percentages
         for (i=0;i<$scope.operationPercentages.length;i++){
           var percentage = Math.round(($scope.operationResults[i] / totalOperations) * 100);
