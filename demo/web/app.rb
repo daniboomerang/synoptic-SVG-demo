@@ -13,8 +13,13 @@ class Web < Sinatra::Base
     set :static, true
   end
 
+  #get '/' do
+  #  erb :index, :layout => :home_layout
+  #end
+
+  # Redirecting to Angular Application
   get '/' do
-    erb :index, :layout => :home_layout
+    redirect '/index.html'
   end
 
 end
