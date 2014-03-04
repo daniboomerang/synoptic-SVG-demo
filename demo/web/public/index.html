@@ -2,16 +2,16 @@
 <html ng-app="synopticDemo" lang="en">
 <head>
   <title>Synoptic SVG demo</title>
-  <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-  <script src="app/javascripts/angular/angular.js"></script>
-  <link rel="stylesheet" href="/app/stylesheets/bootstrap.css">
+  <script src="app/javascripts/vendor/jquery.min.js"></script>
+  <script src="app/javascripts/vendor/angular/angular.js"></script>
+  <link rel="stylesheet" href="/app/stylesheets/vendor/bootstrap.css">
   <link rel="stylesheet" href="/app/stylesheets/synoptic.css">
-  <link rel="stylesheet" href="/app/stylesheets/sticky.css">
+  <link rel="stylesheet" href="/app/stylesheets/vendor/sticky.css">
   <link rel="stylesheet" href="/app/stylesheets/sckeleton.css">
-  <script src="app/javascripts/angular/angular-route.js"></script>
-  <script src="app/javascripts/angular/angular-sanitize.js"></script>
-  <script src="app/javascripts/angular/sticky.js"></script>
-  <script src="app/javascripts/angular/ui-bootstrap-tpls-0.10.0.js"></script>
+  <script src="app/javascripts/vendor/angular/angular-route.js"></script>
+  <script src="app/javascripts/vendor/angular/angular-sanitize.js"></script>
+  <script src="app/javascripts/vendor/angular/sticky.js"></script>
+  <script src="app/javascripts/vendor/angular/ui-bootstrap-tpls-0.10.0.js"></script>
   <script src="app/javascripts/synoptic.js"></script>
 </head>
 <body ng-controller="synopticCtrl">
@@ -51,8 +51,11 @@
             <div ng-show="svgs[svgIndex] == synoptic.BOXES">
               <boxes-manager></boxes-manager>
             </div> 
-            <div ng-show="svgs[svgIndex] == synoptic.OTHER">
+            <div ng-show="svgs[svgIndex] == synoptic.SUM">
               <sum-manager></sum-manager>
+            </div>
+            <div ng-show="svgs[svgIndex] == synoptic.THERMO">
+              <thermo-manager></thermo-manager>
             </div> 
           </div>
           </div>
@@ -68,11 +71,19 @@
           </div>
           <!-- BOXES -->
           <!-- SUM -->
-          <div ng-show="svgs[svgIndex] == synoptic.OTHER">
+          <div ng-show="svgs[svgIndex] == synoptic.SUM">
             <div id="view-container" ng-controller="svgSumCtrl"> 
               <sum-description></sum-description>
               <!-- Directive that embebes the SVG image -->
               <svg-sum></svg-sum>
+            </div>
+          </div>
+          <!-- SUM -->
+          <div ng-show="svgs[svgIndex] == synoptic.THERMO">
+            <div id="view-container" ng-controller="svgThermoCtrl"> 
+              <thermo-description></thermo-description>
+              <!-- Directive that embebes the SVG image -->
+              <svg-thermo></svg-thermo>
             </div>
           </div>
           <!-- SUM -->

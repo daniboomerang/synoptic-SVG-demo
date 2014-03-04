@@ -17,7 +17,7 @@ class Web < Sinatra::Base
   #  erb :index, :layout => :home_layout
   #end
 
-  # Redirecting to Angular Application
+  # Redirecting to the Angular Application
   get '/' do
     redirect '/index.html'
   end

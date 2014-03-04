@@ -1,14 +1,39 @@
 angular.module('synopticDemo', ['sticky', 'ui.bootstrap'])
 
   .controller('synopticCtrl', function($scope){
-    $scope.synoptic = {BOXES: 'boxes', OTHER: 'sum'};
-    $scope.svgs = ['boxes', 'sum'];
-    $scope.svgIndex = 1;
+
+    var NUMBER_SVGS;
+    var INIT_INDEX;
+
+    init();
+
+
     $scope.previousSynoptic = function() {
-      $scope.svgIndex = Math.abs($scope.svgIndex - 1) % $scope.svgs.length;
+      console.log($scope.svgs[$scope.svgIndex]);
+      console.log($scope.svgIndex);
+      console.log("Math.abs($scope.svgIndex - 1)", Math.abs($scope.svgIndex - 1));
+      $scope.svgIndex -= 1; 
+      if ($scope.svgIndex == -1) {
+        $scope.svgIndex = NUMBER_SVGS - 1;
+      }
+      console.log($scope.svgs[$scope.svgIndex]);
+      console.log($scope.svgIndex);
     }
     $scope.nextSynoptic = function() {
-      $scope.svgIndex = ($scope.svgIndex + 1) % $scope.svgs.length;
+      console.log($scope.svgIndex);      
+      console.log($scope.svgs[$scope.svgIndex]);
+      console.log("Math.abs($scope.svgIndex + 1)", Math.abs($scope.svgIndex + 1));
+      $scope.svgIndex = Math.abs($scope.svgIndex + 1) % $scope.svgs.length;
+      console.log($scope.svgIndex);      
+      console.log($scope.svgs[$scope.svgIndex]);
+    }
+
+    function init(){
+      $scope.synoptic = {BOXES: 'boxes', SUM: 'sum', THERMO: 'thermo'};
+      $scope.svgs = ['boxes', 'sum', 'thermo'];
+      NUMBER_SVGS = $scope.svgs.length;
+      INIT_INDEX = 2;
+      $scope.svgIndex = INIT_INDEX;;
     }
   })
 
@@ -17,10 +42,10 @@ angular.module('synopticDemo', ['sticky', 'ui.bootstrap'])
     var randomsServerArray = new Array(); 
 
     return {
-      pullDataFromServer : function() {
+      pullColoursFromServer : function() {
         dataServerArray["rectFill"] = 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
         dataServerArray["rectBorder"] = 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
-        $rootScope.$broadcast('dataServerChanged', dataServerArray);
+        $rootScope.$broadcast('coloursServerChanged', dataServerArray);
       },
       pullRandomsFromServer : function() {
         randomsServerArray["randomA"] = Math.floor((Math.random()*100)+1);
@@ -63,13 +88,73 @@ angular.module('synopticDemo', ['sticky', 'ui.bootstrap'])
    };
   })
 
+
+  // Linking Angular with server: Adding thermometer
+
+.controller('thermoManagerCtrl', function($scope, dataServerService) {  
+    $scope.timeInterval = 1000;
+
+    // The remote control
+    $scope.updateInterval = function(timeInterval) {
+      $scope.timeInterval = timeInterval;
+      this.stopPulling();
+      this.startPulling();      
+    };
+
+    $scope.startPulling = function() {
+      $scope.timer = setInterval(this.refresh, $scope.timeInterval);
+    };
+
+    $scope.stopPulling = function() {
+      clearInterval($scope.timer);
+    };  
+
+    $scope.refresh = function() {  
+      dataServerService.pullColoursFromServer();
+    };
+  }) 
+
+  .controller('svgThermoCtrl', function($scope, dataServerService) {  
+    $scope.serverData = new Array();
+    $scope.$on('coloursServerChanged', function(event, dataServerArray) {
+      $scope.serverData = dataServerArray;
+      $scope.$apply(function () {
+        $scope.serverData = dataServerArray;
+      });
+    }); 
+  })
+
+ .directive('svgThermo', function() {
+    return {
+      restrict: 'E',
+      templateUrl: '/app/svgs/thermometer.svg'
+    };
+  })
+
+  .directive('thermoDescription', function() {
+    return {
+      restrict: 'E',
+      templateUrl: '/app/templates/thermo-description.html'
+    };
+  })
+
+  .directive('thermoManager', function() {
+    return {
+      restrict: 'E',
+      templateUrl: '/app/templates/thermo-manager.html'
+    };
+  })
+
+  // End Linking Angular with server
+
+
   .controller('boxesManagerCtrl', function($scope, dataServerService) {  
     $scope.timeInterval = 1000;
     const LOGGER_RANGE = 13;
     $scope.loggerData = [];
     logMessage('Synoptic Boxes server running at => http://localhost:8000/ CTRL + C to shutdown');
     logMessage('Initial interval => 1000ms');
-    $scope.$on('dataServerChanged', function(event, dataServerArray) {
+    $scope.$on('coloursServerChanged', function(event, dataServerArray) {
       $scope.$apply(function () {
         //updateLogger
         logMessage('Fill=> ' + dataServerArray["rectFill"]);
@@ -102,7 +187,7 @@ angular.module('synopticDemo', ['sticky', 'ui.bootstrap'])
     };  
 
     $scope.refresh = function() {  
-      dataServerService.pullDataFromServer();
+      dataServerService.pullColoursFromServer();
     };
 
     function getCurrentDate() {
@@ -132,7 +217,7 @@ angular.module('synopticDemo', ['sticky', 'ui.bootstrap'])
 
   .controller('svgBoxesCtrl', function($scope, dataServerService) {  
     $scope.serverData = new Array();
-    $scope.$on('dataServerChanged', function(event, dataServerArray) {
+    $scope.$on('coloursServerChanged', function(event, dataServerArray) {
       $scope.serverData = dataServerArray;
       $scope.$apply(function () {
         $scope.serverData = dataServerArray;
