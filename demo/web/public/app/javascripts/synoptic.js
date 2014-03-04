@@ -37,15 +37,15 @@ angular.module('synopticDemo', ['sticky', 'ui.bootstrap'])
     }
   })
 
-  .service('dataServerService', function ($rootScope) {
+  .service('dataServerService', function ($rootScope, $http) {
     var dataServerArray = new Array(); 
     var randomsServerArray = new Array(); 
 
     return {
-      pullColoursFromServer : function() {
+      pullcolorsFromServer : function() {
         dataServerArray["rectFill"] = 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
         dataServerArray["rectBorder"] = 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
-        $rootScope.$broadcast('coloursServerChanged', dataServerArray);
+        $rootScope.$broadcast('colorsServerChanged', dataServerArray);
       },
       pullRandomsFromServer : function() {
         randomsServerArray["randomA"] = Math.floor((Math.random()*100)+1);
@@ -57,13 +57,19 @@ angular.module('synopticDemo', ['sticky', 'ui.bootstrap'])
         $rootScope.$broadcast('randomsServerChanged', randomsServerArray);
       },
       pullThermoDataFromServer : function() {
-        dataServerArray["temperature"] = Math.floor((Math.random()*100)+1);
-        dataServerArray["thermoColour"] = 'green';
-        $rootScope.$broadcast('degreesChanged', dataServerArray);
+        /*dataServerArray["temperature"] = Math.floor((Math.random()*100)+1);
+        dataServerArray["thermoColor"] = 'green';*/
+
+        $http.post('/services/satelite/poolData').success(function(data) {
+          dataServerArray.thermoColor = data.color;
+          dataServerArray.thermoTemperature = data.temperature;
+          console.log('data.color', data.color);
+          console.log('data.temperature', data.temperature);
+          $rootScope.$broadcast('degreesChanged', dataServerArray);
+        }).error(function() {
+          console.log('Error in http.post');
+        });
       },
-      getDataServer : function() {
-        return randomsServerArray;
-      }
    };
   })
 
@@ -114,7 +120,7 @@ angular.module('synopticDemo', ['sticky', 'ui.bootstrap'])
       clearInterval($scope.timer);
     };  
 
-    $scope.refresh = function() {  
+    $scope.refresh = function() {
       dataServerService.pullThermoDataFromServer();
     };
   }) 
@@ -124,18 +130,15 @@ angular.module('synopticDemo', ['sticky', 'ui.bootstrap'])
     init();
 
     $scope.$on('degreesChanged', function(event, dataServerArray) {
-      $scope.serverData = dataServerArray;
-      $scope.$apply(function () {
-        $scope.serverData = dataServerArray;
-      });
+      $scope.serverData = dataServerArray;  
     }); 
 
     function init(){
       $scope.serverData = new Array();
       $scope.green = 'green';
-      $scope.serverData["thermoColour"] = 'red';
-      console.log($scope.serverData.thermoColour);
-      console.log($scope.green);
+      $scope.yellow = 'yellow';
+      console.log($scope.serverData.thermoColor);
+      console.log($scope.serverData.thermoTemperature);
     }
         
   })
@@ -170,7 +173,7 @@ angular.module('synopticDemo', ['sticky', 'ui.bootstrap'])
     $scope.loggerData = [];
     logMessage('Synoptic Boxes server running at => http://localhost:8000/ CTRL + C to shutdown');
     logMessage('Initial interval => 1000ms');
-    $scope.$on('coloursServerChanged', function(event, dataServerArray) {
+    $scope.$on('colorsServerChanged', function(event, dataServerArray) {
       $scope.$apply(function () {
         //updateLogger
         logMessage('Fill=> ' + dataServerArray["rectFill"]);
@@ -203,7 +206,7 @@ angular.module('synopticDemo', ['sticky', 'ui.bootstrap'])
     };  
 
     $scope.refresh = function() {  
-      dataServerService.pullColoursFromServer();
+      dataServerService.pullcolorsFromServer();
     };
 
     function getCurrentDate() {
@@ -234,11 +237,8 @@ angular.module('synopticDemo', ['sticky', 'ui.bootstrap'])
 
   .controller('svgBoxesCtrl', function($scope, dataServerService) {  
     $scope.serverData = new Array();
-    $scope.$on('coloursServerChanged', function(event, dataServerArray) {
+    $scope.$on('colorsServerChanged', function(event, dataServerArray) {
       $scope.serverData = dataServerArray;
-      $scope.$apply(function () {
-        $scope.serverData = dataServerArray;
-      });
     }); 
   })
 
@@ -353,11 +353,9 @@ angular.module('synopticDemo', ['sticky', 'ui.bootstrap'])
     $scope.operation['A']=0; $scope.operation['B']=0; $scope.operation['C']=0;
     $scope.operation['D']=0; $scope.operation['E']=0; $scope.operation['F']=0;
     $scope.operation['resultAB']=0; $scope.operation['resultCD']= 0; $scope.operation['resultEF']=0; $scope.operation['result']=0;     
-    $scope.$on('operationPerformed', function(event, operationPerformed) {
-      $scope.$apply(function () {
+    $scope.$on('operationPerformed', function(event, operationPerformed) {   
         $scope.operation = operationPerformed;
         $scope.resultMod8 = calculator.getOperationResult() % 8;
-      });
     }); 
   })
 

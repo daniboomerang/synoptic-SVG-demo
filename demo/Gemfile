@@ -7,10 +7,10 @@ gem "rake"
 group :test do
   gem "selenium-webdriver"
   gem "rack-test"
-  gem "rspec"
-  gem "cucumber"
+  gem "rspec", "~> 2.14.1"
+  gem "cucumber", "~> 1.3.11"
   gem "capybara"
   gem "capybara-webkit"
   gem "builder"
-  gem "listen"
+  gem "listen", "~> 2.6.2"
 end

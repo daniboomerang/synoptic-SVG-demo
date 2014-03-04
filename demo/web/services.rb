@@ -10,9 +10,9 @@ class Services < Sinatra::Base
 
     attr_accessor :satelite
 
-    post '/satelite/dameDatos', :provides => :json do
-        procesados = dinamicas_domain.procesar_regla_color satelite.datosSatelite
-        procesados.to_json
+    post '/satelite/poolData', :provides => :json do
+        processed = dinamicas_domain.process_color_rule satelite.sateliteData
+        processed.to_json
     end
 
     def dinamicas_domain
