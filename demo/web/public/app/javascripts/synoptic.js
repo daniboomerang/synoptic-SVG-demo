@@ -56,6 +56,11 @@ angular.module('synopticDemo', ['sticky', 'ui.bootstrap'])
         randomsServerArray["randomF"] = Math.floor((Math.random()*100)+1);
         $rootScope.$broadcast('randomsServerChanged', randomsServerArray);
       },
+      pullThermoDataFromServer : function() {
+        dataServerArray["temperature"] = Math.floor((Math.random()*100)+1);
+        dataServerArray["thermoColour"] = 'green';
+        $rootScope.$broadcast('degreesChanged', dataServerArray);
+      },
       getDataServer : function() {
         return randomsServerArray;
       }
@@ -110,18 +115,29 @@ angular.module('synopticDemo', ['sticky', 'ui.bootstrap'])
     };  
 
     $scope.refresh = function() {  
-      dataServerService.pullColoursFromServer();
+      dataServerService.pullThermoDataFromServer();
     };
   }) 
 
   .controller('svgThermoCtrl', function($scope, dataServerService) {  
-    $scope.serverData = new Array();
-    $scope.$on('coloursServerChanged', function(event, dataServerArray) {
+
+    init();
+
+    $scope.$on('degreesChanged', function(event, dataServerArray) {
       $scope.serverData = dataServerArray;
       $scope.$apply(function () {
         $scope.serverData = dataServerArray;
       });
     }); 
+
+    function init(){
+      $scope.serverData = new Array();
+      $scope.green = 'green';
+      $scope.serverData["thermoColour"] = 'green';
+      console.log($scope.serverData.thermoColour);
+      console.log($scope.green);
+    }
+        
   })
 
  .directive('svgThermo', function() {
@@ -213,6 +229,7 @@ angular.module('synopticDemo', ['sticky', 'ui.bootstrap'])
       }
       console.log(" logMessage is finishing");     
     };
+
   }) 
 
   .controller('svgBoxesCtrl', function($scope, dataServerService) {  

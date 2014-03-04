@@ -192,6 +192,9 @@
       </cc:License>
     </rdf:RDF>
   </metadata>
+
+  <!--Angular 
+  <div ng-show="serverData.thermoColour == green"> -->
   <path
      style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:1.03853011;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker-start:none"
      d="m 54.567672,347.77988 103.092048,0 0,-284.283517 -103.209198,-0.129221 z"
