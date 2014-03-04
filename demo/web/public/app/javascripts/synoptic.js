@@ -133,7 +133,7 @@ angular.module('synopticDemo', ['sticky', 'ui.bootstrap'])
     function init(){
       $scope.serverData = new Array();
       $scope.green = 'green';
-      $scope.serverData["thermoColour"] = 'green';
+      $scope.serverData["thermoColour"] = 'red';
       console.log($scope.serverData.thermoColour);
       console.log($scope.green);
     }
