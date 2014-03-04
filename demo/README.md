@@ -4,9 +4,10 @@ synoptic-SVG-demo
 # Technologies:
 
  * Back-end: http://www.sinatrarb.com/
- * Front-end: ERB + Jquery
+ * Front-end: Angularjs
 
 # General behaviour: 
 
- * Periodically pools data from a mocked satelite.
- * Receives all the data in every pool and updates some divs (No SVG right now)
+ * Periodically pools data from a server.
+ * Waits for the server response and updates the SVG image according to this data.
+ * Mocks the connexion with the satelite.
