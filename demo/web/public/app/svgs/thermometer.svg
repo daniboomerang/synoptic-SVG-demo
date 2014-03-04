@@ -28,7 +28,7 @@
      inkscape:window-height="700"
      id="namedview4863"
      showgrid="false"
-     inkscape:zoom="2"
+     inkscape:zoom="0.5"
      inkscape:cx="590.48358"
      inkscape:cy="329.66819"
      inkscape:window-x="0"
@@ -201,30 +201,30 @@
      id="rect3045"
      width="539.13403"
      height="75.50396"
-     x="4.9261479"
+     x="34.926147"
      y="69.840797" />
   <text
      xml:space="preserve"
      style="font-size:16.6339035px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-     x="12.693194"
+     x="47.097965"
      y="79.141228"
      id="text3827"
      sodipodi:linespacing="125%"
-     transform="scale(0.87197218,1.1468256)"><tspan
+     transform="scale(0.87197217,1.1468256)"><tspan
        sodipodi:role="line"
-       x="12.693194"
+       x="47.097965"
        y="79.141228"
-       style="font-size:15.99999985px"
+       style="font-size:16px"
        id="tspan3841">processed.merge!({:color =&gt; &quot;green&quot;})</tspan><tspan
        sodipodi:role="line"
-       x="12.693194"
-       y="98.458717"
-       style="font-size:15.99999985px"
+       x="47.097965"
+       y="99.141228"
+       style="font-size:16px"
        id="tspan3839">processed.merge!({:color =&gt; &quot;yellow&quot;}) if sateliteData[:temperature] &gt; 60</tspan><tspan
        sodipodi:role="line"
-       x="12.693194"
-       y="117.77621"
-       style="font-size:15.99999985px"
+       x="47.097965"
+       y="119.14123"
+       style="font-size:16px"
        id="tspan3845">processed.merge!({:color =&gt; &quot;red&quot;}) if sateliteData[:temperature] &gt; 80</tspan></text>
   <rect
      y="246.97467"

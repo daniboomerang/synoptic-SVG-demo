@@ -401,6 +401,14 @@ angular.module('synopticDemo', ['sticky', 'ui.bootstrap'])
     };
   })
 
+
+  .directive('remoteControl', function() {
+    return {
+      restrict: 'E',
+      templateUrl: '/app/templates/remote-control.html'
+    };
+  })
+
   .directive('backgroundImage', function () {
     return function (scope, element, attrs) {
       element.css({

@@ -1,0 +1,38 @@
+/******************/
+/* REMOTE-CONTROL */
+/******************/
+
+.play-stop{
+    float: left;
+}
+.update-interval{
+    float: right;
+}
+.custom-button{
+    background-color: transparent;
+    border: transparent;
+}
+.custom-button-control{
+    background-color: black;
+     -webkit-border-radius: 5px 5px 5px 5px;
+    border-radius: 5px 5px 5px 5px;
+    -webkit-box-shadow: 0 0 6px 1px #C7C7C7;
+    box-shadow: 0 0 6px 1px #C7C7C7;
+}
+
+.remote-control-container{
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+#ms-setter{
+    margin-top: 0px;
+    height: 28px;
+    width: 80px;
+    text-align: center;
+}
+.form-control{
+    height: 22px;
+    background-color: black;
+    color: green; 
+}

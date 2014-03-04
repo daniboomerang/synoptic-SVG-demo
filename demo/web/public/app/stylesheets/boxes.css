@@ -1,0 +1,10 @@
+.logger-boxes-container{
+  width: 396px;
+  height: 300px;
+  margin-top: 30px;
+  background-color: black;
+  text-align: left;
+  color: green; 
+  font-size: 12px;
+  padding: 10px;
+}
