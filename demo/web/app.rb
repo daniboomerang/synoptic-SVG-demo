@@ -22,4 +22,8 @@ class Web < Sinatra::Base
     redirect '/index.html'
   end
 
+  #get '/monitor' do
+  #  redirect '/app/modules/monitor/index.html'
+  #end
+
 end

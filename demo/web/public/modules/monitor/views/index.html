@@ -1,0 +1,55 @@
+  <div ng-controller="MonitorCtrl" id="monitor-container" class="gray-cool-border"  background-image="/modules/monitor/images/minimalistLinesSimetric.png">
+
+    <button class="custom-button" style="margin-top:2px;" ng-click="previousSynoptic()"><img src="/modules/monitor/images/buttons/arrow-left-24.png"/></button>
+    <button class="custom-button" style="margin-top:2px;" ng-click="nextSynoptic()"><img src="/modules/monitor/images/buttons/arrow-right-24.png"/></button>
+
+    <div id="main-container">
+      <div id="simutator-container">
+        <div class="synoptic-manager">
+          <div sticky>
+          <div id="padding-the-sticky">  
+          <div class="manager-container red-cool-border">
+            <div ng-show="svgs[svgIndex] == synoptic.BOXES">
+              <boxes-manager></boxes-manager>
+            </div> 
+            <div ng-show="svgs[svgIndex] == synoptic.SUM">
+              <sum-manager></sum-manager>
+            </div>
+            <div ng-show="svgs[svgIndex] == synoptic.THERMO">
+              <thermo-manager></thermo-manager>
+            </div> 
+          </div>
+          </div>
+          </div>
+        </div>
+        <div class="synoptic-view red-cool-border">
+         <!-- BOXES -->
+          <div ng-show="svgs[svgIndex] == synoptic.BOXES">
+            <div class="view-container" ng-controller="svgBoxesCtrl"> 
+              <boxes-description></boxes-description>
+              <!-- Directive that embebes the SVG image -->
+              <svg-boxes></svg-boxes>
+            </div>
+          </div>
+          <!-- BOXES -->
+          <!-- SUM -->
+          <div ng-show="svgs[svgIndex] == synoptic.SUM">
+            <div id="view-container" ng-controller="svgSumCtrl"> 
+              <sum-description></sum-description>
+              <!-- Directive that embebes the SVG image -->
+              <svg-sum></svg-sum>
+            </div>
+          </div>
+          <!-- SUM -->
+          <div ng-show="svgs[svgIndex] == synoptic.THERMO">
+            <div id="view-container" ng-controller="svgThermoCtrl"> 
+              <thermo-description></thermo-description>
+              <!-- Directive that embebes the SVG image -->
+              <svg-thermo></svg-thermo>
+            </div>
+          </div>
+          <!-- SUM -->
+        </div>
+      </div>
+    </div>
+  </div>
