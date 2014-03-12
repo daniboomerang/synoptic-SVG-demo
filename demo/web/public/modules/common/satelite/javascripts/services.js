@@ -1,8 +1,8 @@
-/*  Monitor Services */
+/*  satelite Services */
 
-var monitorServices = angular.module('monitorServices', [])
+var sateliteServices = angular.module('sateliteServices', [])
 
-monitorServices.service('dataServerService', function ($rootScope, $http) {
+sateliteServices.service('dataServerService', function ($rootScope, $http) {
   var dataServerArray = new Array(); 
   var randomsServerArray = new Array(); 
 
@@ -35,7 +35,7 @@ monitorServices.service('dataServerService', function ($rootScope, $http) {
  };
 })
 
-monitorServices.service('calculator', function ($rootScope) {
+sateliteServices.service('calculator', function ($rootScope) {
     var operation = {
       A: 0, B: 0, C: 0, D: 0, E: 0, F: 0,
       resultAB: 0,
@@ -60,5 +60,3 @@ monitorServices.service('calculator', function ($rootScope) {
       }
    };
   });
-
-

@@ -3,9 +3,9 @@
 // Define main module and inject all other modules as dependencies
 var synopticDemo = angular.module('SynopticDemo',
   [
-    'Monitor',
     'ngRoute',
     'ngSanitize',
+    'Monitor'
   ]
 );
 

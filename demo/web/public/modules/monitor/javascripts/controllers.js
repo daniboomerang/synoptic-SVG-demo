@@ -1,7 +1,6 @@
 /* Monitor Controllers */
 
-var monitorControllers = angular.module('monitorControllers', ['sticky', 'ui.bootstrap'])
-
+var monitorControllers = angular.module('monitorControllers', ['sateliteServices'])
 
 monitorControllers.controller('MonitorCtrl', function($scope){
 
@@ -75,8 +74,6 @@ monitorControllers.controller('svgThermoCtrl', function($scope, dataServerServic
     $scope.serverData = new Array();
     $scope.green = 'green';
     $scope.yellow = 'yellow';
-    console.log($scope.serverData.thermoColor);
-    console.log($scope.serverData.thermoTemperature);
   }      
 });
 

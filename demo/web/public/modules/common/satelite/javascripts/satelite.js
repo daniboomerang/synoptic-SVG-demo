@@ -1,10 +1,9 @@
 'use strict';
       
 // Defines Monitor module and injects all other modules as dependencies
-var monitor = angular.module('Monitor',
+var satelite = angular.module('Satelite',
   [
-    'monitorControllers',
-    'monitorDirectives',
+    'sateliteServices'
   ]
 );
 

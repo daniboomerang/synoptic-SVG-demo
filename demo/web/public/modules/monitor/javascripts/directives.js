@@ -1,6 +1,6 @@
 /* Monitor Directives */
 
-var monitorDirectives = angular.module('monitorDirectives', [])
+var monitorDirectives = angular.module('monitorDirectives', [ 'sticky', 'ui.bootstrap'])
 
 monitorDirectives.directive('svgThermo', function() {
     return {
