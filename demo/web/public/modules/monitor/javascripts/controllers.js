@@ -174,7 +174,7 @@ monitorControllers.controller('sumManagerCtrl', function($scope, sateliteDataSer
 
   /* Listening changes on dataServer */
   $scope.$on('randomsServerChanged', function(event, randomsServerArray) {
-    calculator.performRandomOperation(randomsServerArray);
+    calculator.performOperation(randomsServerArray);
     totalOperations += 1;
     $scope.$apply(function () {
       

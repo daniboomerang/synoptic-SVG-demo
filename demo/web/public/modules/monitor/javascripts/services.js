@@ -3,7 +3,7 @@
 var monitorServices = angular.module('monitorServices', [])
 
 monitorServices.service('calculator', function ($rootScope) {
-    var randomsServerArray = new Array(); 
+    var numbers = new Array(); 
     var operation = {
       A: 0, B: 0, C: 0, D: 0, E: 0, F: 0,
       resultAB: 0,
@@ -12,13 +12,13 @@ monitorServices.service('calculator', function ($rootScope) {
       result: 0, 
     }    
     return {
-      performRandomOperation : function(randomsServerArray) {
-        operation.A = randomsServerArray["randomA"]; operation.B = randomsServerArray["randomB"];
-        operation.C = randomsServerArray["randomC"]; operation.D = randomsServerArray["randomD"];
-        operation.E = randomsServerArray["randomA"]; operation.F = randomsServerArray["randomA"];
-        operation.resultAB = randomsServerArray["randomA"] + randomsServerArray["randomB"];
-        operation.resultCD = randomsServerArray["randomC"] + randomsServerArray["randomD"];
-        operation.resultEF = randomsServerArray["randomE"] + randomsServerArray["randomF"];
+      performOperation : function(numbers) {
+        operation.A = numbers["randomA"]; operation.B = numbers["randomB"];
+        operation.C = numbers["randomC"]; operation.D = numbers["randomD"];
+        operation.E = numbers["randomA"]; operation.F = numbers["randomA"];
+        operation.resultAB = numbers["randomA"] + numbers["randomB"];
+        operation.resultCD = numbers["randomC"] + numbers["randomD"];
+        operation.resultEF = numbers["randomE"] + numbers["randomF"];
         operation.result = operation.resultAB + operation.resultCD + operation.resultEF;
         console.log("performing operation and result is ", operation.result);
         $rootScope.$broadcast('operationPerformed', operation);
