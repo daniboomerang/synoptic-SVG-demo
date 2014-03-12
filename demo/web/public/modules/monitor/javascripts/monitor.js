@@ -5,6 +5,7 @@ var monitor = angular.module('Monitor',
   [
     'monitorControllers',
     'monitorDirectives',
+    'monitorServices'
   ]
 );
 

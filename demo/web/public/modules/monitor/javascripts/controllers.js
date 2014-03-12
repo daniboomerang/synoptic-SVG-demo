@@ -39,7 +39,7 @@ monitorControllers.controller('MonitorCtrl', function($scope){
   }
 });  
 
-monitorControllers.controller('thermoManagerCtrl', function($scope, dataServerService) {  
+monitorControllers.controller('thermoManagerCtrl', function($scope, sateliteDataService) {  
   $scope.timeInterval = 1000;
 
   // The remote control
@@ -58,11 +58,11 @@ monitorControllers.controller('thermoManagerCtrl', function($scope, dataServerSe
   };  
 
   $scope.refresh = function() {
-    dataServerService.pullThermoDataFromServer();
+    sateliteDataService.pullThermoDataFromServer();
   };
 }); 
 
-monitorControllers.controller('svgThermoCtrl', function($scope, dataServerService) {  
+monitorControllers.controller('svgThermoCtrl', function($scope, sateliteDataService) {  
 
   init();
 
@@ -77,7 +77,7 @@ monitorControllers.controller('svgThermoCtrl', function($scope, dataServerServic
   }      
 });
 
-monitorControllers.controller('boxesManagerCtrl', function($scope, dataServerService) {  
+monitorControllers.controller('boxesManagerCtrl', function($scope, sateliteDataService) {  
   $scope.timeInterval = 1000;
   const LOGGER_RANGE = 13;
   $scope.loggerData = [];
@@ -116,7 +116,7 @@ monitorControllers.controller('boxesManagerCtrl', function($scope, dataServerSer
   };  
 
   $scope.refresh = function() {  
-    dataServerService.pullcolorsFromServer();
+    sateliteDataService.pullcolorsFromServer();
   };
 
   function getCurrentDate() {
@@ -145,14 +145,14 @@ monitorControllers.controller('boxesManagerCtrl', function($scope, dataServerSer
 
 });
 
-monitorControllers.controller('svgBoxesCtrl', function($scope, dataServerService) {  
+monitorControllers.controller('svgBoxesCtrl', function($scope, sateliteDataService) {  
   $scope.serverData = new Array();
   $scope.$on('colorsServerChanged', function(event, dataServerArray) {
     $scope.serverData = dataServerArray;
   }); 
 });
 
-monitorControllers.controller('sumManagerCtrl', function($scope, dataServerService, calculator) {
+monitorControllers.controller('sumManagerCtrl', function($scope, sateliteDataService, calculator) {
   $scope.timeInterval = 1000; 
 
   // Statistics
@@ -221,7 +221,7 @@ monitorControllers.controller('sumManagerCtrl', function($scope, dataServerServi
   };  
 
   $scope.refresh = function() {  
-    dataServerService.pullRandomsFromServer();
+    sateliteDataService.pullRandomsFromServer();
   };
 
   function getCurrentDate() {
