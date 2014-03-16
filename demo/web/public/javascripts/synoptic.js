@@ -14,10 +14,10 @@ synopticDemo.config(function($routeProvider) {
         $routeProvider
           .when('/', {
             templateUrl: '/modules/monitor/views/index.html',
-            controller: 'MonitorCtrl'
+            controller: 'monitorCtrl'
           })
           $routeProvider.otherwise({
             templateUrl: '/modules/monitor/views/index.html',
-            controller: 'MonitorCtrl'
+            controller: 'monitorCtrl'
           })  
         })

@@ -10,8 +10,6 @@ monitorDirectives.directive('svgThermo', function() {
   })
 
 monitorDirectives.directive('thermoDescription', function() {
-      console.log("thermoDescriptionDirective", window.location.pathname);
-
   return {
     restrict: 'E',
     templateUrl: '/modules/monitor/views/thermo-description.html'

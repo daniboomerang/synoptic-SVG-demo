@@ -1,33 +1,22 @@
 /* Monitor Controllers */
 
-var monitorControllers = angular.module('monitorControllers', ['sateliteServices'])
+var monitorControllers = angular.module('monitorControllers', ['monitorServices'])
 
-monitorControllers.controller('MonitorCtrl', function($scope){
+monitorControllers.controller('monitorCtrl', function($scope){
 
   var NUMBER_SVGS;
   var INIT_INDEX;
 
   init();
 
-
   $scope.previousSynoptic = function() {
-    console.log($scope.svgs[$scope.svgIndex]);
-    console.log($scope.svgIndex);
-    console.log("Math.abs($scope.svgIndex - 1)", Math.abs($scope.svgIndex - 1));
     $scope.svgIndex -= 1; 
     if ($scope.svgIndex == -1) {
       $scope.svgIndex = NUMBER_SVGS - 1;
     }
-    console.log($scope.svgs[$scope.svgIndex]);
-    console.log($scope.svgIndex);
   }
   $scope.nextSynoptic = function() {
-    console.log($scope.svgIndex);      
-    console.log($scope.svgs[$scope.svgIndex]);
-    console.log("Math.abs($scope.svgIndex + 1)", Math.abs($scope.svgIndex + 1));
     $scope.svgIndex = Math.abs($scope.svgIndex + 1) % $scope.svgs.length;
-    console.log($scope.svgIndex);      
-    console.log($scope.svgs[$scope.svgIndex]);
   }
 
   function init(){
@@ -35,89 +24,55 @@ monitorControllers.controller('MonitorCtrl', function($scope){
     $scope.svgs = ['boxes', 'sum', 'thermo'];
     NUMBER_SVGS = $scope.svgs.length;
     INIT_INDEX = 2;
-    $scope.svgIndex = INIT_INDEX;;
+    $scope.svgIndex = INIT_INDEX;
   }
 });  
 
-monitorControllers.controller('thermoManagerCtrl', function($scope, sateliteDataService) {  
-  $scope.timeInterval = 1000;
+/**************/
+/* TERMOMETER */
+/**************/
 
-  // The remote control
-  $scope.updateInterval = function(timeInterval) {
-    $scope.timeInterval = timeInterval;
-    this.stopPulling();
-    this.startPulling();      
-  };
+monitorControllers.controller('thermoManagerCtrl', function($scope) {  
+  $scope.sensibleData = 'thermoData';
+});  
 
-  $scope.startPulling = function() {
-    $scope.timer = setInterval(this.refresh, $scope.timeInterval);
-  };
-
-  $scope.stopPulling = function() {
-    clearInterval($scope.timer);
-  };  
-
-  $scope.refresh = function() {
-    sateliteDataService.pullThermoDataFromServer();
-  };
-}); 
-
-monitorControllers.controller('svgThermoCtrl', function($scope, sateliteDataService) {  
+monitorControllers.controller('svgThermoCtrl', function($scope, sensibleDataService) {  
 
   init();
 
-  $scope.$on('degreesChanged', function(event, dataServerArray) {
-    $scope.serverData = dataServerArray;  
+  $scope.$on('thermoDataChanged', function(event, sensibleData) {
+    $scope.sateliteData = sensibleData;  
   }); 
 
   function init(){
-    $scope.serverData = new Array();
-    $scope.green = 'green';
-    $scope.yellow = 'yellow';
+    $scope.sateliteData = new Array();
+    $scope.color = {GREEN: 'green', YELLOW: 'yellow'};
+    $scope.sateliteData.thermoColor = $scope.color.GREEN;
+    $scope.sateliteData.thermoTemperature = 15;
   }      
 });
 
-monitorControllers.controller('boxesManagerCtrl', function($scope, sateliteDataService) {  
-  $scope.timeInterval = 1000;
+/**************/
+/**************/
+
+/*********/
+/* BOXES */
+/*********/
+
+monitorControllers.controller('boxesManagerCtrl', function($scope, sensibleDataService) {  
+
+  $scope.sensibleData = 'boxesData';
+  console.log("boxesManager with sensible data: ", $scope.sensibleData);
+
   const LOGGER_RANGE = 13;
   $scope.loggerData = [];
   logMessage('Synoptic Boxes server running at => http://localhost:8000/ CTRL + C to shutdown');
   logMessage('Initial interval => 1000ms');
-  $scope.$on('colorsServerChanged', function(event, dataServerArray) {
-    $scope.$apply(function () {
+  $scope.$on('boxesDataChanged', function(event, sensibleData) {
       //updateLogger
-      logMessage('Fill=> ' + dataServerArray["rectFill"]);
-      logMessage('Border=> ' + dataServerArray["rectBorder"]);
-      //processStatistics
-      //* TO  DO */
-      if (dataServerArray["rectFill"] == dataServerArray["rectBorder"]){
-        logMessage("Match fill and border => " + dataServerArray["rectBorder"]);          
-      }
-    });
+      logMessage('Fill=> ' + sensibleData["rectFill"]);
+      logMessage('Border=> ' + sensibleData["rectBorder"]);
   });
-
-  // The remote control
-  $scope.updateInterval = function(timeInterval) {
-    logMessage('timermeInterval = ' + timeInterval);
-    logMessage('Synchronizing...');  
-    $scope.timeInterval = timeInterval;
-    this.stopPulling();
-    this.startPulling();      
-  };
-
-  $scope.startPulling = function() {
-    logMessage('Pulling data from server...');  
-    $scope.timer = setInterval(this.refresh, $scope.timeInterval);
-  };
-
-  $scope.stopPulling = function() {
-    logMessage('Stopping simulation...');  
-    clearInterval($scope.timer);
-  };  
-
-  $scope.refresh = function() {  
-    sateliteDataService.pullcolorsFromServer();
-  };
 
   function getCurrentDate() {
       // Today date time which will used to set as default date.
@@ -140,20 +95,31 @@ monitorControllers.controller('boxesManagerCtrl', function($scope, sateliteDataS
       $scope.loggerData = auxArray.slice(0,LOGGER_RANGE-1);
       $scope.loggerData.lenght = 0;
     }
-    console.log(" logMessage is finishing");     
   };
 
 });
 
-monitorControllers.controller('svgBoxesCtrl', function($scope, sateliteDataService) {  
-  $scope.serverData = new Array();
-  $scope.$on('colorsServerChanged', function(event, dataServerArray) {
-    $scope.serverData = dataServerArray;
+monitorControllers.controller('svgBoxesCtrl', function($scope, sensibleDataService) {  
+  $scope.sateliteData = new Array();
+  $scope.$on('boxesDataChanged', function(event, sensibleData) {
+    $scope.sateliteData = sensibleData;
   }); 
 });
 
-monitorControllers.controller('sumManagerCtrl', function($scope, sateliteDataService, calculator) {
-  $scope.timeInterval = 1000; 
+/********/
+/********/
+/********/
+
+
+/*******/
+/* SUM */
+/*******/
+
+monitorControllers.controller('sumManagerCtrl', function($scope, sensibleDataService, calculatorService) {
+  
+  console.log ('sumManager starts');
+  $scope.sensibleData = 'sumData';
+  console.log("sumManager with sensible data: ", $scope.sensibleData);
 
   // Statistics
   const MOD_APPLIED = 8;
@@ -173,21 +139,20 @@ monitorControllers.controller('sumManagerCtrl', function($scope, sateliteDataSer
   logMessage('Initial interval => 1000ms');
 
   /* Listening changes on dataServer */
-  $scope.$on('randomsServerChanged', function(event, randomsServerArray) {
-    calculator.performOperation(randomsServerArray);
+  $scope.$on('sumDataChanged', function(event, sensibleData) {
+    calculatorService.performOperation(sensibleData);
     totalOperations += 1;
-    $scope.$apply(function () {
       
       //UpdateLogger
-      logMessage('RandomA=> ' + randomsServerArray["randomA"]);
-      logMessage('RandomB=> ' + randomsServerArray["randomB"]);
-      logMessage('RandomC=> ' + randomsServerArray["randomC"]);
-      logMessage('RandomD=> ' + randomsServerArray["randomD"]);
-      logMessage('RandomE=> ' + randomsServerArray["randomE"]);
-      logMessage('RandomF=> ' + randomsServerArray["randomF"]);
+      logMessage('RandomA=> ' + sensibleData["randomA"]);
+      logMessage('RandomB=> ' + sensibleData["randomB"]);
+      logMessage('RandomC=> ' + sensibleData["randomC"]);
+      logMessage('RandomD=> ' + sensibleData["randomD"]);
+      logMessage('RandomE=> ' + sensibleData["randomE"]);
+      logMessage('RandomF=> ' + sensibleData["randomF"]);
       // ProcessStatistics
       // Result mod MOD_APPLIED
-      $scope.result = calculator.getOperationResult();
+      $scope.result = calculatorService.getOperationResult();
       $scope.resultAppliedMOD = $scope.result % MOD_APPLIED;
       $scope.resultsOcurrencies[$scope.resultAppliedMOD] += 1;
       // Recalculate percentages
@@ -196,33 +161,9 @@ monitorControllers.controller('sumManagerCtrl', function($scope, sateliteDataSer
         $scope.operationPercentages[i] = {number: i, percentage: percentage};
       }
       $scope.operationPercentages.sort(function comparePercentages(a, b) {
-        return b.percentage - a.percentage;
-      });
+        return b.percentage - a.percentage;weuoqwiueoiqwue
     });
   });
-
-  // The remote control
-  $scope.updateInterval = function(timeInterval) {
-    logMessage('timermeInterval = ' + timeInterval);
-    logMessage('Synchronizing...');  
-    $scope.timeInterval = timeInterval;
-    this.stopPulling();
-    this.startPulling();      
-  };
-
-  $scope.startPulling = function() {
-    logMessage('Pulling data from server...');  
-    $scope.timer = setInterval(this.refresh, $scope.timeInterval);
-  };
-
-  $scope.stopPulling = function() {
-    logMessage('Stopping simulation...');  
-    clearInterval($scope.timer);
-  };  
-
-  $scope.refresh = function() {  
-    sateliteDataService.pullRandomsFromServer();
-  };
 
   function getCurrentDate() {
       // Today date time which will used to set as default date.
@@ -245,7 +186,6 @@ monitorControllers.controller('sumManagerCtrl', function($scope, sateliteDataSer
       $scope.loggerData = auxArray.slice(0,LOGGER_RANGE-1);
       $scope.loggerData.lenght = 0;
     }
-    console.log(" logMessage is finishing");     
   };
 
   function initArrayToZero(length){
@@ -257,7 +197,7 @@ monitorControllers.controller('sumManagerCtrl', function($scope, sateliteDataSer
   };
 });
 
-monitorControllers.controller('svgSumCtrl', function($scope, calculator) {  
+monitorControllers.controller('svgSumCtrl', function($scope, calculatorService) {  
   $scope.operation = [];
   $scope.resultMod8 = 0;
   $scope.operation['A']=0; $scope.operation['B']=0; $scope.operation['C']=0;
@@ -265,8 +205,50 @@ monitorControllers.controller('svgSumCtrl', function($scope, calculator) {
   $scope.operation['resultAB']=0; $scope.operation['resultCD']= 0; $scope.operation['resultEF']=0; $scope.operation['result']=0;     
   $scope.$on('operationPerformed', function(event, operationPerformed) {   
       $scope.operation = operationPerformed;
-      $scope.resultMod8 = calculator.getOperationResult() % 8;
+      $scope.resultMod8 = calculatorService.getOperationResult() % 8;
   }); 
 });
 
+/*******/
+/*******/
+/*******/
 
+/******** COMMON: THE REMOTE CONTROLLER ********/
+
+monitorControllers.controller('remoteCtrl', function($scope,$interval,sensibleDataService) {
+
+  var stop;
+
+  init();
+
+  $scope.startPulling = function() {
+    // Don't start a new pulling if we are already pulling
+    if ( angular.isDefined(stop) ) return;
+
+    stop = $interval(function() {
+      sensibleDataService.getSensibleData($scope.sensibleData);
+    }, $scope.timeInterval);
+  };
+
+  $scope.stopPulling = function() {
+    if (angular.isDefined(stop)) {
+      $interval.cancel(stop);
+      stop = undefined;
+    }
+  };
+
+  $scope.updateInterval = function(newInterval) {
+    $scope.timeInterval = newInterval;
+    this.stopPulling();
+    this.startPulling();      
+  };
+
+  $scope.$on('$destroy', function() {
+    // Make sure that the interval is destroyed too
+    $scope.stopPulling();
+  });
+
+  function init(){
+    $scope.timeInterval = 1000;
+  }
+});

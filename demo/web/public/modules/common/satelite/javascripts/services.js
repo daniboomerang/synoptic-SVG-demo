@@ -3,34 +3,34 @@
 var sateliteServices = angular.module('sateliteServices', [])
 
 sateliteServices.service('sateliteDataService', function ($rootScope, $http) {
-  var dataServerArray = new Array(); 
-  var randomsServerArray = new Array(); 
+  var sateliteData = new Array(); 
 
   return {
-    pullcolorsFromServer : function() {
-      dataServerArray["rectFill"] = 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
-      dataServerArray["rectBorder"] = 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
-      $rootScope.$broadcast('colorsServerChanged', dataServerArray);
+    pullColorsFromServer : function() {
+      sateliteData["rectFill"] = 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
+      sateliteData["rectBorder"] = 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
+      console.log("sateliteData boxes fill and border colors in Satelite Service: ", sateliteData.rectFill,sateliteData.rectBorder);
+      $rootScope.$broadcast('boxesDataChanged', sateliteData);
     },
     pullRandomsFromServer : function() {
-      randomsServerArray["randomA"] = Math.floor((Math.random()*100)+1);
-      randomsServerArray["randomB"] = Math.floor((Math.random()*100)+1);
-      randomsServerArray["randomC"] = Math.floor((Math.random()*100)+1);
-      randomsServerArray["randomD"] = Math.floor((Math.random()*100)+1);
-      randomsServerArray["randomE"] = Math.floor((Math.random()*100)+1);
-      randomsServerArray["randomF"] = Math.floor((Math.random()*100)+1);
-      $rootScope.$broadcast('randomsServerChanged', randomsServerArray);
+      sateliteData["randomA"] = Math.floor((Math.random()*100)+1);
+      sateliteData["randomB"] = Math.floor((Math.random()*100)+1);
+      sateliteData["randomC"] = Math.floor((Math.random()*100)+1);
+      sateliteData["randomD"] = Math.floor((Math.random()*100)+1);
+      sateliteData["randomE"] = Math.floor((Math.random()*100)+1);
+      sateliteData["randomF"] = Math.floor((Math.random()*100)+1);
+      console.log("sateliteData sum RandomA and RandomB in Satelite Service: ", sateliteData.randomA,sateliteData.randomB);
+      $rootScope.$broadcast('sumDataChanged', sateliteData);
     },
     pullThermoDataFromServer : function() {
       $http.post('/services/satelite/poolData').success(function(data) {
-        dataServerArray.thermoColor = data.color;
-        dataServerArray.thermoTemperature = data.temperature;
-        console.log('data.color', data.color);
-        console.log('data.temperature', data.temperature);
-        $rootScope.$broadcast('degreesChanged', dataServerArray);
+        sateliteData.thermoColor = data.color;
+        sateliteData.thermoTemperature = data.temperature;
+        console.log("sateliteData thermo color and temperature in Satelite Service", sateliteData.thermoColor,sateliteData.thermoTemperature);
+        $rootScope.$broadcast('thermoDataChanged', sateliteData);
       }).error(function() {
         console.log('Error in http.post');
       });
-    },
+    }
  };
 });
