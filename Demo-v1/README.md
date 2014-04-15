@@ -1,5 +1,5 @@
-synoptic-SVG-demo: Front-end only
-=================================
+Demo-v1: Front-end only
+=======================
 
 http://synoptic-svg-demo.herokuapp.com/
 
