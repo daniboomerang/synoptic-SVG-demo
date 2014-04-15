@@ -215,7 +215,7 @@ monitorControllers.controller('svgSumCtrl', function($scope, calculatorService) 
 
 /******** COMMON: THE REMOTE CONTROLLER ********/
 
-monitorControllers.controller('remoteCtrl', function($scope,$interval,sensibleDataService) {
+monitorControllers.controller('remoteCtrl', function($scope,$interval,sensibleDataList,sensibleDataService) {
 
   var stop;
 
