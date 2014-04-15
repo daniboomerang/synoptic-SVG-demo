@@ -19,3 +19,7 @@ http://synoptic-svg-demo.herokuapp.com/
  * Receives all the data in every pool and updates the SVG propertly.
 
 *Note: Server side http://nodejs.org/ (no functionallity, but a server is needed in order to run it on Heroku)
+
+# Find project main activities at:
+
+https://trello.com/b/FQETbGYj/demo-v1-front-end-only
