@@ -1,7 +1,8 @@
-Demo-v1: Front-end only
-=======================
+Demo-v1: Front-end only. Simple App with Angularjs that manipulates SVG image properties
+========================================================================================
 
-http://synoptic-svg-demo.herokuapp.com/
+Live demo:
+http://synoptic-svg-demo-v1.herokuapp.com/
 
 # Technologies
 
@@ -14,12 +15,12 @@ http://synoptic-svg-demo.herokuapp.com/
 
 # General behaviour: 
 
- * Periodically pools data from a mocked server.
+ * Periodically "polls" data from a mocked server.
  * This mocked server is mocking a satelite (That serves its data) in turn. 
- * Receives all the data in every pool and updates the SVG propertly.
+ * Receives all the data in every poll and updates the SVG propertly.
 
-*Note: Server side http://nodejs.org/ (no functionallity, but a server is needed in order to run it on Heroku)
+*Note: Server side http://nodejs.org/ (no functionallity, but a server is needed in order to run it on Heroku).
 
-# Find project main activities at:
+# Trello: Find project main activities at:
 
-https://trello.com/b/FQETbGYj/demo-v1-front-end-only
+https://trello.com/b/FQETbGYj/

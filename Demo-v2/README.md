@@ -1,5 +1,8 @@
-Demo-v2: Web Services
-=====================
+Demo-v2: Web services. Ruby running on server side. Front-end polls data on demand
+==================================================================================
+
+Live demo:
+http://synoptic-svg-demo-v2.herokuapp.com/
 
 # Technologies:
 
@@ -9,14 +12,15 @@ Demo-v2: Web Services
 # Main Project Goals:
 
  * To extend the architecture of the project, adding a Back-end that serves the data of the satelite.
+ * To test the new architecture/performance of the app, Getting data through web services and updating heavy SVG images.
  * Angular App organized by feature => 'Modular-App'.
 
 # General behaviour: 
 
- * Periodically client app pools data from the server. (Server is not mocked anymore)
+ * Periodically the client app polls data from the server. (Server is not mocked anymore)
  * Waits for the server response and updates the SVG image according to this data.
  * The server mocks the connexion with the satelite. (There is not an actual satelite)
 
-# Find project main activities at:
+# Trello: Find project main activities at:
 
-https://trello.com/b/hN1j5TIl/demo-v2-web-services
+https://trello.com/b/hN1j5TIl
