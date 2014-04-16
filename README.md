@@ -2,7 +2,7 @@ synoptic-SVG-demo
 =================
 
 Root demo projects at:
-http://synoptic-svg-demo.herokuapp.com/
+http://synoptic-svg-dashboard.herokuapp.com/
 
 # Main Project Goals:
 
