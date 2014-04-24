@@ -80,6 +80,13 @@ monitorDirectives.directive('monitor', function() {
   };
 })
 
+monitorDirectives.directive('logger', function() {
+  return {
+    restrict: 'E',
+    templateUrl: '/modules/monitor/views/logger.html'
+  };
+})
+
 monitorDirectives.directive('backgroundImage', function () {
   return function (scope, element, attrs) {
     element.css({

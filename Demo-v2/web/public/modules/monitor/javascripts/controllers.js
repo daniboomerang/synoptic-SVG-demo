@@ -61,42 +61,12 @@ monitorControllers.controller('svgThermoCtrl', function($scope, sensibleDataServ
 
 monitorControllers.controller('boxesManagerCtrl', function($scope, sensibleDataService) {  
 
-  $scope.sensibleData = 'boxesData';
-  console.log("boxesManager with sensible data: ", $scope.sensibleData);
+  initComponents();
 
-  const LOGGER_RANGE = 13;
-  $scope.loggerData = [];
-  logMessage('Synoptic Boxes server running at => http://localhost:8000/ CTRL + C to shutdown');
-  logMessage('Initial interval => 1000ms');
-  $scope.$on('boxesDataChanged', function(event, sensibleData) {
-      //updateLogger
-      logMessage('Fill=> ' + sensibleData["rectFill"]);
-      logMessage('Border=> ' + sensibleData["rectBorder"]);
-  });
-
-  function getCurrentDate() {
-      // Today date time which will used to set as default date.
-      var todayDate = new Date();
-      todayDate = todayDate.getFullYear() + "-" +
-                     ("0" + (todayDate.getMonth() + 1)).slice(-2) + "-" +
-                     ("0" + todayDate.getDate()).slice(-2) + " " + ("0" + todayDate.getHours()).slice(-2) + ":" +
-                     ("0" + todayDate.getMinutes()).slice(-2);
-
-      return todayDate;
+  function initComponents(){
+    $scope.sensibleData = 'boxesData';
+    console.log("boxesManager with sensible data: ", $scope.sensibleData);
   };
-
-  function logMessage(message){
-    var auxArray = [];
-    $scope.loggerData.push(getCurrentDate() + '# ' + 'root@synopticDemo> ' + message);
-    if ($scope.loggerData.length % LOGGER_RANGE == 0){
-      for (var i=$scope.loggerData.length-1;i>=1;i--){
-        auxArray[i] = $scope.loggerData[i+1];
-      } 
-      $scope.loggerData = auxArray.slice(0,LOGGER_RANGE-1);
-      $scope.loggerData.lenght = 0;
-    }
-  };
-
 });
 
 monitorControllers.controller('svgBoxesCtrl', function($scope, sensibleDataService) {  
@@ -213,9 +183,9 @@ monitorControllers.controller('svgSumCtrl', function($scope, calculatorService) 
 /*******/
 /*******/
 
-/******** COMMON: THE REMOTE CONTROLLER ********/
+/******** COMMON: THE REMOTE CONTROL ********/
 
-monitorControllers.controller('remoteCtrl', function($scope,$interval,sensibleDataService) {
+monitorControllers.controller('remoteCtrl', function($scope, $interval, sensibleDataService) {
 
   var stop;
 
@@ -223,7 +193,7 @@ monitorControllers.controller('remoteCtrl', function($scope,$interval,sensibleDa
 
   $scope.startPulling = function() {
     // Don't start a new pulling if we are already pulling
-    if ( angular.isDefined(stop) ) return;
+    if (angular.isDefined(stop)) return;
 
     stop = $interval(function() {
       sensibleDataService.getSensibleData($scope.sensibleData);
@@ -252,3 +222,41 @@ monitorControllers.controller('remoteCtrl', function($scope,$interval,sensibleDa
     $scope.timeInterval = 1000;
   }
 });
+
+/******** COMMON: THE LOGGER ********/
+
+monitorControllers.controller('loggerCtrl', function($scope, $interval, sensibleDataService) {
+
+  const LOGGER_RANGE = 13;
+  $scope.loggerData = [];
+  logMessage('Ready to monitor...');
+  $scope.$on($scope.sensibleData + 'Changed', function(event, sensibleData) {
+      //updateLogger
+      logMessage('Fill=> ' + sensibleData["rectFill"]);
+      logMessage('Border=> ' + sensibleData["rectBorder"]);
+  });
+
+  function logMessage(message){
+    var auxArray = [];
+    $scope.loggerData.push(getCurrentDate() + ' # ' + $scope.sensibleData + '>' + message);
+    if ($scope.loggerData.length % LOGGER_RANGE == 0){
+      for (var i=$scope.loggerData.length-1;i>=1;i--){
+        auxArray[i] = $scope.loggerData[i+1];
+      } 
+      $scope.loggerData = auxArray.slice(0,LOGGER_RANGE-1);
+      $scope.loggerData.lenght = 0;
+    }
+  };
+
+  function getCurrentDate() {
+    // Today date time which will used to set as default date.
+    var todayDate = new Date();
+    todayDate = todayDate.getFullYear() + "-" +
+                   ("0" + (todayDate.getMonth() + 1)).slice(-2) + "-" +
+                   ("0" + todayDate.getDate()).slice(-2) + " " + ("0" + todayDate.getHours()).slice(-2) + ":" +
+                   ("0" + todayDate.getMinutes()).slice(-2);
+
+    return todayDate;
+  };
+});
+
