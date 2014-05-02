@@ -1,0 +1,8 @@
+<div ng-controller="loaderCtrl">
+  <div class="loader-page">
+  	<div class="loader-container gray-loader-border">
+	  	<progressbar id="loading-bar" class="progress-striped active" value="loadingPercentage"><b>{{ loadingPercentage }}%</b></progressbar>
+	  	<div ng-bind-html="loadingMessage" class="loading-messages"></div>
+	</div>		  	
+  </div>
+</div>

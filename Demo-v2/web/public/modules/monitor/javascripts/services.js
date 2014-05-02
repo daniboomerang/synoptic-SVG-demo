@@ -2,6 +2,22 @@
 
 var monitorServices = angular.module('monitorServices', ['sateliteServices'])
 
+monitorServices.service('monitorConfigurationService', function ($rootScope) {
+  
+  var configurationData = {
+    synopticNames: []
+  };
+
+  return {
+    setMonitorConfiguration : function(data) {
+    configurationData = data;
+    },
+    getMonitorConfiguration : function() {
+    return configurationData;
+    }
+ };
+});
+
 monitorServices.service('calculatorService', function ($rootScope) {
     var numbers = new Array(); 
     var operation = {

@@ -23,7 +23,7 @@ sateliteServices.service('sateliteDataService', function ($rootScope, $http) {
       $rootScope.$broadcast('sumDataChanged', sateliteData);
     },
     pullThermoDataFromServer : function() {
-      $http.post('/services/satelite/poolData').success(function(data) {
+      $http.get('/services/satelite/poolData').success(function(data) {
         sateliteData.thermoColor = data.color;
         sateliteData.thermoTemperature = data.temperature;
         console.log("sateliteData thermo color and temperature in Satelite Service", sateliteData.thermoColor,sateliteData.thermoTemperature);

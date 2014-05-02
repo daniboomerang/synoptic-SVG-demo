@@ -5,19 +5,20 @@ var synopticDemo = angular.module('SynopticDemo',
   [
     'ngRoute',
     'ngSanitize',
-    'Monitor'
+    'Monitor',
+    'Loader'
   ]
 );
 
 // Routing
 synopticDemo.config(function($routeProvider) {
-        $routeProvider
-          .when('/', {
-            templateUrl: '/modules/monitor/views/index.html',
-            controller: 'monitorCtrl'
-          })
-          $routeProvider.otherwise({
-            templateUrl: '/modules/monitor/views/index.html',
-            controller: 'monitorCtrl'
-          })  
-        })
+  $routeProvider
+    .when('/', {
+      templateUrl: '/modules/common/loader/views/index.html',
+      controller: 'loaderCtrl'
+    })
+    $routeProvider.otherwise({
+      templateUrl: '/modules/monitor/views/index.html',
+      controller: 'monitorCtrl'
+    })  
+  })

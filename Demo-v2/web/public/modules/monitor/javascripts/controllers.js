@@ -2,10 +2,14 @@
 
 var monitorControllers = angular.module('monitorControllers', ['monitorServices'])
 
-monitorControllers.controller('monitorCtrl', function($scope){
+monitorControllers.controller('monitorCtrl', function($scope, monitorConfigurationService){
 
   var NUMBER_SVGS;
   var INIT_INDEX;
+
+  var configurationData = {
+    synopticNames: []
+  };
 
   init();
 
@@ -20,8 +24,10 @@ monitorControllers.controller('monitorCtrl', function($scope){
   }
 
   function init(){
-    $scope.synoptic = {BOXES: 'boxes', SUM: 'sum', THERMO: 'thermo'};
-    $scope.svgs = ['boxes', 'sum', 'thermo'];
+    configurationData = monitorConfigurationService.getMonitorConfiguration();
+    var names = configurationData.synopticNames;
+    $scope.synoptic = {BOXES: names[0], SUM: names[1], THERMO: names[2]};
+    $scope.svgs = [names[0], names[1], names[2]];
     NUMBER_SVGS = $scope.svgs.length;
     INIT_INDEX = 2;
     $scope.svgIndex = INIT_INDEX;
@@ -65,7 +71,6 @@ monitorControllers.controller('boxesManagerCtrl', function($scope, sensibleDataS
 
   function initComponents(){
     $scope.sensibleData = 'boxesData';
-    console.log("boxesManager with sensible data: ", $scope.sensibleData);
   };
 });
 
@@ -87,9 +92,7 @@ monitorControllers.controller('svgBoxesCtrl', function($scope, sensibleDataServi
 
 monitorControllers.controller('sumManagerCtrl', function($scope, sensibleDataService, calculatorService) {
   
-  console.log ('sumManager starts');
   $scope.sensibleData = 'sumData';
-  console.log("sumManager with sensible data: ", $scope.sensibleData);
 
   // Statistics
   const MOD_APPLIED = 8;
@@ -131,7 +134,7 @@ monitorControllers.controller('sumManagerCtrl', function($scope, sensibleDataSer
         $scope.operationPercentages[i] = {number: i, percentage: percentage};
       }
       $scope.operationPercentages.sort(function comparePercentages(a, b) {
-        return b.percentage - a.percentage;weuoqwiueoiqwue
+        return b.percentage - a.percentage;
     });
   });
 
