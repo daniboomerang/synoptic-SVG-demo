@@ -3,17 +3,17 @@ $LOAD_PATH << 'web/lib'
 $LOAD_PATH << 'dinamicas/lib'
 
 require 'json'
-require 'satelite'
+require 'satellite'
 require 'configuration'
 require 'dinamicas_domain'
 
 class Services < Sinatra::Base
 
-    attr_accessor :satelite
+    attr_accessor :satellite
     attr_accessor :configuration
 
-    get '/satelite/poolData', :provides => :json do
-        processed = dinamicas_domain.process_color_rule satelite.sateliteData
+    get '/satellite/poolData', :provides => :json do
+        processed = dinamicas_domain.process_color_rule satellite.satelliteData
         processed.to_json
     end
 
@@ -35,8 +35,8 @@ class Services < Sinatra::Base
         @dinamicas_domain ||= Dinamicas::Domain.new
     end
 
-    def satelite
-        @satelite ||= Satelite.new
+    def satellite
+        @satellite ||= Satellite.new
     end
 
     def configuration

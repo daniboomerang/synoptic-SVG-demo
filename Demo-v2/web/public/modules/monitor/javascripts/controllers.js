@@ -48,6 +48,7 @@ monitorControllers.controller('svgThermoCtrl', function($scope, sensibleDataServ
 
   $scope.$on('thermoDataChanged', function(event, sensibleData) {
     $scope.satelliteData = sensibleData;  
+    console.log("thermo sensible listening response= ", sensibleData.thermoColor, sensibleData.thermoTemperature);
   }); 
 
   function init(){
