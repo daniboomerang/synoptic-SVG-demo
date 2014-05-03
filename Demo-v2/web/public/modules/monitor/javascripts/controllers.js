@@ -47,14 +47,14 @@ monitorControllers.controller('svgThermoCtrl', function($scope, sensibleDataServ
   init();
 
   $scope.$on('thermoDataChanged', function(event, sensibleData) {
-    $scope.sateliteData = sensibleData;  
+    $scope.satelliteData = sensibleData;  
   }); 
 
   function init(){
-    $scope.sateliteData = new Array();
+    $scope.satelliteData = new Array();
     $scope.color = {GREEN: 'green', YELLOW: 'yellow'};
-    $scope.sateliteData.thermoColor = $scope.color.GREEN;
-    $scope.sateliteData.thermoTemperature = 15;
+    $scope.satelliteData.thermoColor = $scope.color.GREEN;
+    $scope.satelliteData.thermoTemperature = 15;
   }      
 });
 
@@ -75,9 +75,9 @@ monitorControllers.controller('boxesManagerCtrl', function($scope, sensibleDataS
 });
 
 monitorControllers.controller('svgBoxesCtrl', function($scope, sensibleDataService) {  
-  $scope.sateliteData = new Array();
+  $scope.satelliteData = new Array();
   $scope.$on('boxesDataChanged', function(event, sensibleData) {
-    $scope.sateliteData = sensibleData;
+    $scope.satelliteData = sensibleData;
   }); 
 });
 

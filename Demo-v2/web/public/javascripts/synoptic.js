@@ -6,7 +6,9 @@ var synopticDemo = angular.module('SynopticDemo',
     'ngRoute',
     'ngSanitize',
     'Monitor',
-    'Loader'
+    'Loader',
+    'Dynamics'
+
   ]
 );
 

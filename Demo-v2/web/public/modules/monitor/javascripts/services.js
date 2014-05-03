@@ -1,6 +1,6 @@
 /*  Monitor Services */
 
-var monitorServices = angular.module('monitorServices', ['sateliteServices'])
+var monitorServices = angular.module('monitorServices', ['satelliteServices'])
 
 monitorServices.service('monitorConfigurationService', function ($rootScope) {
   
@@ -45,35 +45,35 @@ monitorServices.service('calculatorService', function ($rootScope) {
    };
   });
 
-monitorServices.service('sensibleDataService', function (sateliteDataService) {
+monitorServices.service('sensibleDataService', function (satelliteDataService) {
   var newSensibleData = new Array();
   return {
     getSensibleData : function(sensibleData) {
       if (sensibleData == 'thermoData'){
         console.log("refresh", sensibleData);
-        sateliteDataService.pullThermoDataFromServer();
+        satelliteDataService.pullThermoDataFromServer();
       }  
       else if (sensibleData == 'boxesData'){
         console.log("refresh", sensibleData);
-        sateliteDataService.pullColorsFromServer();
+        satelliteDataService.pullColorsFromServer();
       }  
       else if (sensibleData == 'sumData'){
         console.log("refresh", sensibleData);
-        sateliteDataService.pullRandomsFromServer();
+        satelliteDataService.pullRandomsFromServer();
       }
-      /*$rootScope.$on('boxesDataChanged', function(event, sateliteData) {
+      /*$rootScope.$on('boxesDataChanged', function(event, satelliteData) {
         console.log('sensibleDataService just listened and event: $rootScope.$on boxesDataChanged');
-        newSensibleData = sateliteData;
+        newSensibleData = satelliteData;
         console.log("boxesSensibleData in MonitorService: fill & border colors: ", newSensibleData.rectFill, newSensibleData.rectBorder);
       });
-      $scope.$on('sumDataChanged', function(event, sateliteData) {
+      $scope.$on('sumDataChanged', function(event, satelliteData) {
         console.log('sensibleDataService just listened and event: $rootScope.$on sumDataChanged');
-        newSensibleData = sateliteData;
+        newSensibleData = satelliteData;
         console.log("sumSensibleData in MonitorService RandomA & RandomB: ", newSensibleData.randomA, newSensibleData.randomB);
       }); 
-      $scope.$on('thermoDataChanged', function(event, sateliteData) {
+      $scope.$on('thermoDataChanged', function(event, satelliteData) {
         console.log('sensibleDataService just listened and event: $rootScope.$on thermoDataChanged');
-        newSensibleData = sateliteData;
+        newSensibleData = satelliteData;
         console.log("thermoSensibleData in MonitorService Color & Temperature: ", newSensibleData.thermoColor, newSensibleData.thermoTemperature);      });*/
     }
   }    
