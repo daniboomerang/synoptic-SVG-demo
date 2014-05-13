@@ -2,13 +2,12 @@
 
 var loaderServices = angular.module('loaderServices', ['monitorServices'])
 
-loaderServices.service('loadConfigurationService', function ($http, monitorConfigurationService) {
+loaderServices.service('loadConfigurationService', function ($http, monitorDataService) {
 
   var configurationData = {
     synopticsInformation: {
-      data: {
-        synopticNames: []
-      },
+      data:
+        [{synopticName: '', sensibleDataListName: ''}],
       isLoaded: false
     },
     dynamicsInformation: {
@@ -16,25 +15,30 @@ loaderServices.service('loadConfigurationService', function ($http, monitorConfi
         dynamicPaths: []
       },
       isLoaded: false
-    }
+    },
+    sensibleDataListsInformation: {
+      data:
+        [{sensibleDataListName: '', defaultPropertiesContent: [{propertyName: '', propertyValue: ''}]}],
+      isLoaded: false  
+    }  
   };
 
 
   return {
 
-    loadMonitorInformation : function(deferred) {
+    loadSynopticsInformation : function(deferred) {
       if (!configurationData.synopticsInformation.isLoaded) {
-        console.log("No Cache");
+        console.log("No Cache for synoptics information");
         deferred.notify("0-Retrieving synoptics information from server...");
         return $http.get('/services/configuration/loadSynopticsData').success(function(data) {
 
           configurationData.synopticsInformation.data = data;
           configurationData.synopticsInformation.isLoaded = true;         
-          deferred.notify("45-Synoptics information loaded....");
+          deferred.notify("35-Synoptics information loaded....");      
           
-          // Seting up the module monitor
-          monitorConfigurationService.setMonitorConfiguration(configurationData.synopticsInformation.data);
-          deferred.notify("10-Module monitor set...");
+          // Adding synoptics info to the module monitor
+          monitorDataService.setSynopticsInformation(configurationData.synopticsInformation.data);
+          deferred.notify("5-Synoptics information set...");
           return deferred.resolve();
 
           //console.log(configurationData.data.synopticNames[0], configurationData.data.synopticNames[1], configurationData.data.synopticNames[2]);
@@ -47,17 +51,46 @@ loaderServices.service('loadConfigurationService', function ($http, monitorConfi
       }
     },
 
+    loadSensibleDataListsInformation : function(deferred) {
+      if (!configurationData.sensibleDataListsInformation.isLoaded) {
+        console.log("No Cache for sensible data lists information");
+        deferred.notify("0-Retrieving sensible data lists from server...");
+        return $http.get('/services/configuration/loadSensibleListsData').success(function(data) {
+
+          deferred.notify("35-Sensible data lists information loaded....");
+
+          configurationData.sensibleDataListsInformation.data = data;
+          console.log("loadSensibleDataListsInformation[0] " + data[0].sensibleDataListName);
+          configurationData.sensibleDataListsInformation.isLoaded = true;         
+          
+          // Adding sensible data lists to monitor
+          monitorDataService.setSensibleDataListsInformation(configurationData.sensibleDataListsInformation.data);
+
+          deferred.notify("5-Sensible data information set...");
+          return deferred.resolve();
+
+          //console.log(configurationData.data.synopticNames[0], configurationData.data.synopticNames[1], configurationData.data.synopticNames[2]);
+        }).error(function() {
+          console.error('Failed to load sensible data lists information.');
+          return deferred.reject('Failed to load sensible data lists information.');
+        });
+      } else {
+          return deferred.resolve();
+      }
+    },
+
     loadDynamicsInformation : function(deferred) {
       if (!configurationData.dynamicsInformation.isLoaded) {
+        console.log("No Cache for dynamics information");
         deferred.notify("0-Retrieving synoptics information from server...");
         return $http.get('/services/configuration/loadDynamicsData').success(function(data) {
           
           configurationData.dynamicsInformation.isLoaded = true;
-          deferred.notify("35-Dynamics information loaded...");
+          deferred.notify("15-Dynamics information loaded...");
           
           // Seting up the module dynamics
           //setupMonitorService.setupComponentMonitor(synopticsInformation);
-          deferred.notify("10-Module dynamics set...");
+          deferred.notify("5-Dynamics information set...");
           return deferred.resolve();
 
         }).error(function() {

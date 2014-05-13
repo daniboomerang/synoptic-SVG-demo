@@ -17,30 +17,32 @@ dynamicsServices.service('dynamicsConfigurationService', function () {
 
 dynamicsServices.service('dynamicsProcessorService', function () {
   
-  // List of new values in the properties of the synoptics
-  var propertyValueChangesList = [];
-
-  function applyRules(newData){
-
-    propertyValueChangesList = []; //Emptying the list of changes
-
-    /* Hardcoding Thermometer dynamic */
-    if (newData.name == "Temperature"){
-      if (newData.value > 60)
-        propertyValueChangesList.push({ThermoColor: "yellow"});
-      if (newData.value > 85)
-        propertyValueChangesList.push({ThermoColor: "red"});
-      else
-        propertyValueChangesList.push({ThermoColor: "green"});
-    }
-  }
+  // List of new propertyValues in the properties of the synoptics
+  var propertyChangesList = [];
 
   return {
 
-    processDynamics : function(sateliteData) {
-      for (var i=0;sateliteData.length;i++)
-      { applyRules(sateliteData[i]); }  
-    return propertyValueChangesList;
+    applyDynamics : function(satelliteData) {
+
+      function applyRules(newData){
+        console.log("ApplyRules");
+        propertyChangesList = []; //Emptying the list of changes
+        /* Hardcoding Thermometer dynamic */
+        if (newData.name == "temperature"){
+          propertyChangesList.push({propertyName: "thermoTemperature", propertyValue: newData.value});
+          if (newData.value <= 60) 
+            propertyChangesList.push({propertyName: "thermoColor", propertyValue: "green"});
+          if (newData.value > 60)
+            propertyChangesList.push({propertyName: "thermoColor", propertyValue: "yellow"});
+          if (newData.value > 85)
+            propertyChangesList.push({propertyName: "thermoColor", propertyValue: "red"});
+        }
+      }
+      
+      for (var i=0; i<satelliteData.length; i++){
+        applyRules(satelliteData[i]);
+      }  
+      return propertyChangesList;
     }
 
  };

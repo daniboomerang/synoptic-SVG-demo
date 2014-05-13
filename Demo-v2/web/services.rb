@@ -1,38 +1,39 @@
 # encoding: utf-8
 $LOAD_PATH << 'web/lib'
-$LOAD_PATH << 'dinamicas/lib'
 
 require 'json'
 require 'satellite'
 require 'configuration'
-require 'dinamicas_domain'
 
 class Services < Sinatra::Base
 
     attr_accessor :satellite
     attr_accessor :configuration
 
-    get '/satellite/poolData', :provides => :json do
-        processed = dinamicas_domain.process_color_rule satellite.satelliteData
+    get '/satellite/pollData', :provides => :json do
+        processed = satellite.satelliteData
         processed.to_json
     end
 
     get '/configuration/loadSynopticsData', :provides => :json do
-            sleep 6
+            sleep 2
 
         processed = configuration.synopticsInformation
         processed.to_json
     end
 
-    get '/configuration/loadDynamicsData', :provides => :json do
-            sleep 2
+    get '/configuration/loadSensibleListsData', :provides => :json do
+            sleep 4
 
-        processed = configuration.dynamicsInformation
+        processed = configuration.sensibleDataListsInformation
         processed.to_json
     end
 
-    def dinamicas_domain
-        @dinamicas_domain ||= Dinamicas::Domain.new
+    get '/configuration/loadDynamicsData', :provides => :json do
+            sleep 7
+
+        processed = configuration.dynamicsInformation
+        processed.to_json
     end
 
     def satellite

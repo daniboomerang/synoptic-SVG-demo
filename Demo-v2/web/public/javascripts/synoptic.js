@@ -19,8 +19,12 @@ synopticDemo.config(function($routeProvider) {
       templateUrl: '/modules/common/loader/views/index.html',
       controller: 'loaderCtrl'
     })
-    $routeProvider.otherwise({
+    .when('/monitor', {
       templateUrl: '/modules/monitor/views/index.html',
       controller: 'monitorCtrl'
-    })  
-  })
+    })
+    .otherwise({
+      templateUrl: '/modules/common/loader/views/index.html',
+      controller: 'loaderCtrl'
+    });  
+})

@@ -6,7 +6,8 @@ class Satellite
   end
 
   def satelliteData
-    {:temperature => TEMPERATURE.sample}
+    [{:name => 'temperature',
+     :value => TEMPERATURE.sample}]
   end
 
 end

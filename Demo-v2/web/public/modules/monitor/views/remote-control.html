@@ -1,7 +1,7 @@
 <div ng-controller="remoteCtrl">
 	<div class="remote-control-container"> 
-		<button class="col-xs-3 custom-button-control" ng-click="startPulling()"><img src="/modules/monitor/images/buttons/play-20.png"/></button>
-		<button class="col-xs-3 custom-button-control" ng-click="stopPulling()"><img src="/modules/monitor/images/buttons/stop-20.png"/></button>
+		<button class="col-xs-3 custom-button-control" ng-click="startPolling()"><img src="/modules/monitor/images/buttons/play-20.png"/></button>
+		<button class="col-xs-3 custom-button-control" ng-click="stopPolling()"><img src="/modules/monitor/images/buttons/stop-20.png"/></button>
 		<input ng-model="timeInterval" type="text" class="form-control col-xs-4" id="ms-setter"required autofocus>
 		<!--<input ng-model=1000 type="text" class="form-control col-xs-4" id="ms-setter"required autofocus>-->
 		<button class="col-xs-3 custom-button-control" ng-click="updateInterval(timeInterval)"><img src="/modules/monitor/images/buttons/sinchronize-20.png"/></button>

@@ -6,9 +6,15 @@ loaderControllers.controller('loaderCtrl', function($scope, $q, $timeout, $locat
   $scope.loadingMessage = "Starting module loader...";
   $scope.loadingPercentage = 0;
   
-  function loadMonitorInformation() {
+  function loadSynopticsInformation() {
     var deferred = $q.defer(); 
-    loadConfigurationService.loadMonitorInformation(deferred);
+    loadConfigurationService.loadSynopticsInformation(deferred);
+    return deferred.promise;
+  }
+
+  function loadSensibleDataListsInformation() {
+    var deferred = $q.defer(); 
+    loadConfigurationService.loadSensibleDataListsInformation(deferred);
     return deferred.promise;
   }
 
@@ -19,16 +25,28 @@ loaderControllers.controller('loaderCtrl', function($scope, $q, $timeout, $locat
   }
 
   function loadMonitorPage(){
-    $timeout(function() {$location.url('/modules/monitor/views/index.html');}, 2000);
+    console.log("Loading monitor page...");
+    $timeout(function() {$location.url('/monitor');}, 4000);
 
   }
 
-  var promiseMonitor = loadMonitorInformation();
-  promiseMonitor.then(function() {
+  var promiseSynoptics = loadSynopticsInformation();
+  promiseSynoptics.then(function() {
     if ($scope.loadingPercentage == 100)
       loadMonitorPage();
   }, function(reason) {
-    $scope.loadingMessage = 'Ups...it has been an error loading monitor information: ' + reason;
+    $scope.loadingMessage = 'Ups...it has been an error loading the synoptics information: ' + reason;
+  }, function(update) {
+    $scope.loadingPercentage = $scope.loadingPercentage + parseInt(update.split("-")[0]);
+    $scope.loadingMessage = update.split("-")[1];
+  }); 
+
+  var promiseSensibleData = loadSensibleDataListsInformation();
+  promiseSensibleData.then(function() {
+    if ($scope.loadingPercentage == 100)
+      loadMonitorPage();
+  }, function(reason) {
+    $scope.loadingMessage = 'Ups...it has been an error loading the sensible data lists information: ' + reason;
   }, function(update) {
     $scope.loadingPercentage = $scope.loadingPercentage + parseInt(update.split("-")[0]);
     $scope.loadingMessage = update.split("-")[1];

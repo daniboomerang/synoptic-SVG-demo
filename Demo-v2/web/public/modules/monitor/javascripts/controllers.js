@@ -2,13 +2,14 @@
 
 var monitorControllers = angular.module('monitorControllers', ['monitorServices'])
 
-monitorControllers.controller('monitorCtrl', function($scope, monitorConfigurationService){
+monitorControllers.controller('monitorCtrl', function($scope, monitorDataService){
 
   var NUMBER_SVGS;
   var INIT_INDEX;
 
-  var configurationData = {
-    synopticNames: []
+  $scope.monitorInformation = {
+    synopticsInformation: [{synopticName: '', sensibleDataListName: ''}],
+    sensibleDataListsInformation: [{sensibleDataListName: '', propertiesList: [{propertyName: '', propertyValue: ''}]}]
   };
 
   init();
@@ -24,8 +25,13 @@ monitorControllers.controller('monitorCtrl', function($scope, monitorConfigurati
   }
 
   function init(){
-    configurationData = monitorConfigurationService.getMonitorConfiguration();
-    var names = configurationData.synopticNames;
+    console.log ("Init monitor controller");
+    $scope.monitorInformation.synopticsInformation = monitorDataService.getSynopticsInformation();      
+    $scope.monitorInformation.sensibleDataListsInformation = monitorDataService.getSensibleDataListsInformation();
+    var names = [];
+    for (var i=0; i<$scope.monitorInformation.synopticsInformation.length; i++){
+      names[i] = $scope.monitorInformation.synopticsInformation[i].synopticName;
+    }  
     $scope.synoptic = {BOXES: names[0], SUM: names[1], THERMO: names[2]};
     $scope.svgs = [names[0], names[1], names[2]];
     NUMBER_SVGS = $scope.svgs.length;
@@ -39,16 +45,18 @@ monitorControllers.controller('monitorCtrl', function($scope, monitorConfigurati
 /**************/
 
 monitorControllers.controller('thermoManagerCtrl', function($scope) {  
-  $scope.sensibleData = 'thermoData';
 });  
 
-monitorControllers.controller('svgThermoCtrl', function($scope, sensibleDataService) {  
+monitorControllers.controller('svgThermoCtrl', function($scope, monitorDataService) {  
 
   init();
 
-  $scope.$on('thermoDataChanged', function(event, sensibleData) {
-    $scope.satelliteData = sensibleData;  
-    console.log("thermo sensible listening response= ", sensibleData.thermoColor, sensibleData.thermoTemperature);
+  $scope.$on('randomTemperatureChanged', function(event, sensibleDataChanges) {
+    
+    for (var i=0; i<sensibleDataChanges.length; i++){
+      var currentUpdatedProperty = sensibleDataChanges[i];
+      $scope.satelliteData[currentUpdatedProperty.propertyName] = currentUpdatedProperty.propertyValue;
+    }
   }); 
 
   function init(){
@@ -66,19 +74,13 @@ monitorControllers.controller('svgThermoCtrl', function($scope, sensibleDataServ
 /* BOXES */
 /*********/
 
-monitorControllers.controller('boxesManagerCtrl', function($scope, sensibleDataService) {  
-
-  initComponents();
-
-  function initComponents(){
-    $scope.sensibleData = 'boxesData';
-  };
+monitorControllers.controller('boxesManagerCtrl', function($scope) {
 });
 
-monitorControllers.controller('svgBoxesCtrl', function($scope, sensibleDataService) {  
+monitorControllers.controller('svgBoxesCtrl', function($scope) {  
   $scope.satelliteData = new Array();
-  $scope.$on('boxesDataChanged', function(event, sensibleData) {
-    $scope.satelliteData = sensibleData;
+  $scope.$on("randomColorsChanged", function(event, sensibleDataChanges) {
+    $scope.satelliteData = sensibleDataChanges;
   }); 
 });
 
@@ -91,10 +93,8 @@ monitorControllers.controller('svgBoxesCtrl', function($scope, sensibleDataServi
 /* SUM */
 /*******/
 
-monitorControllers.controller('sumManagerCtrl', function($scope, sensibleDataService, calculatorService) {
+monitorControllers.controller('sumManagerCtrl', function($scope, calculatorService) {
   
-  $scope.sensibleData = 'sumData';
-
   // Statistics
   const MOD_APPLIED = 8;
   $scope.statisticsLenght = MOD_APPLIED;
@@ -113,17 +113,17 @@ monitorControllers.controller('sumManagerCtrl', function($scope, sensibleDataSer
   logMessage('Initial interval => 1000ms');
 
   /* Listening changes on dataServer */
-  $scope.$on('sumDataChanged', function(event, sensibleData) {
-    calculatorService.performOperation(sensibleData);
+  $scope.$on('randomNumbersChanged', function(event, sensibleDataChanges) {
+    calculatorService.performOperation(sensibleDataChanges);
     totalOperations += 1;
       
       //UpdateLogger
-      logMessage('RandomA=> ' + sensibleData["randomA"]);
-      logMessage('RandomB=> ' + sensibleData["randomB"]);
-      logMessage('RandomC=> ' + sensibleData["randomC"]);
-      logMessage('RandomD=> ' + sensibleData["randomD"]);
-      logMessage('RandomE=> ' + sensibleData["randomE"]);
-      logMessage('RandomF=> ' + sensibleData["randomF"]);
+      logMessage('RandomA=> ' + sensibleDataChanges["randomA"]);
+      logMessage('RandomB=> ' + sensibleDataChanges["randomB"]);
+      logMessage('RandomC=> ' + sensibleDataChanges["randomC"]);
+      logMessage('RandomD=> ' + sensibleDataChanges["randomD"]);
+      logMessage('RandomE=> ' + sensibleDataChanges["randomE"]);
+      logMessage('RandomF=> ' + sensibleDataChanges["randomF"]);
       // ProcessStatistics
       // Result mod MOD_APPLIED
       $scope.result = calculatorService.getOperationResult();
@@ -189,22 +189,21 @@ monitorControllers.controller('svgSumCtrl', function($scope, calculatorService) 
 
 /******** COMMON: THE REMOTE CONTROL ********/
 
-monitorControllers.controller('remoteCtrl', function($scope, $interval, sensibleDataService) {
+monitorControllers.controller('remoteCtrl', function($scope, $interval, pollDataService) {
 
   var stop;
 
   init();
 
-  $scope.startPulling = function() {
+  $scope.startPolling = function() {
     // Don't start a new pulling if we are already pulling
     if (angular.isDefined(stop)) return;
-
     stop = $interval(function() {
-      sensibleDataService.getSensibleData($scope.sensibleData);
+      pollDataService.pollServer();
     }, $scope.timeInterval);
   };
 
-  $scope.stopPulling = function() {
+  $scope.stopPolling = function() {
     if (angular.isDefined(stop)) {
       $interval.cancel(stop);
       stop = undefined;
@@ -213,13 +212,13 @@ monitorControllers.controller('remoteCtrl', function($scope, $interval, sensible
 
   $scope.updateInterval = function(newInterval) {
     $scope.timeInterval = newInterval;
-    this.stopPulling();
-    this.startPulling();      
+    this.stopPolling();
+    this.startPolling();      
   };
 
   $scope.$on('$destroy', function() {
     // Make sure that the interval is destroyed too
-    $scope.stopPulling();
+    $scope.stopPolling();
   });
 
   function init(){
@@ -229,20 +228,21 @@ monitorControllers.controller('remoteCtrl', function($scope, $interval, sensible
 
 /******** COMMON: THE LOGGER ********/
 
-monitorControllers.controller('loggerCtrl', function($scope, $interval, sensibleDataService) {
+monitorControllers.controller('loggerCtrl', function($scope, $interval, monitorDataService) {
 
+/*
   const LOGGER_RANGE = 13;
   $scope.loggerData = [];
   logMessage('Ready to monitor...');
-  $scope.$on($scope.sensibleData + 'Changed', function(event, sensibleData) {
+  $scope.$on($scope.sensibleDataList + 'Changed', function(event, sensibleDataChanges) {
       //updateLogger
-      logMessage('Fill=> ' + sensibleData["rectFill"]);
-      logMessage('Border=> ' + sensibleData["rectBorder"]);
+      logMessage('Fill=> ' + sensibleDataChanges["rectFill"]);
+      logMessage('Border=> ' + sensibleDataChanges["rectBorder"]);
   });
 
   function logMessage(message){
     var auxArray = [];
-    $scope.loggerData.push(getCurrentDate() + ' # ' + $scope.sensibleData + '>' + message);
+    $scope.loggerData.push(getCurrentDate() + ' # ' + $scope.sensibleDataList + '>' + message);
     if ($scope.loggerData.length % LOGGER_RANGE == 0){
       for (var i=$scope.loggerData.length-1;i>=1;i--){
         auxArray[i] = $scope.loggerData[i+1];
@@ -261,6 +261,6 @@ monitorControllers.controller('loggerCtrl', function($scope, $interval, sensible
                    ("0" + todayDate.getMinutes()).slice(-2);
 
     return todayDate;
-  };
+  };*/
 });
 
