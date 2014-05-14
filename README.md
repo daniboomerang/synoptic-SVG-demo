@@ -1,12 +1,12 @@
-synoptic-SVG-demo
+synoptic-demo
 =================
 
 Root demo projects at:
-http://synoptic-svg-dashboard.herokuapp.com/
+http://synoptic-demo-dashboard.herokuapp.com/
 
 # Main Project Goals:
 
- * Aimed to test the performace of a web-app that monitors semi-real-time data changes and updates synoptic images (*.SVG) according to this data.
+ * Aimed to test the performace of a web-app that monitors semi-real-time data changes and updates synoptic images (as of today *.SVG images) according to this data.
 
 # Trello: Find project main activities at:
 

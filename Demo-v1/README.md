@@ -2,7 +2,7 @@ Demo-v1: Front-end only. Simple App with Angularjs that manipulates SVG image pr
 ========================================================================================
 
 Live demo:
-http://synoptic-svg-demo-v1.herokuapp.com/
+http://synoptic-demo-v1.herokuapp.com/
 
 # Technologies
 

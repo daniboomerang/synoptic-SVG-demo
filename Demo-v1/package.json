@@ -1,5 +1,5 @@
 {
-  "name": "synoptic-SVG-demo",
+  "name": "synoptic-demo",
   "version": "0.0.0",
   "description": "SVG Demo",
   "main": "web.js",
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/daniboomerang/synoptic-SVG-demo"
+    "url": "https://github.com/daniboomerang/synoptic-demo"
   },
   "keywords": [
     "example",
@@ -21,6 +21,6 @@
   "author": "https://github.com/daniboomerang",
   "license": "BSD",
   "bugs": {
-    "url": "https://github.com/daniboomerang/synoptic-SVG-demo/issues"
+    "url": "https://github.com/daniboomerang/synoptic-demo/issues"
   }
 }
