@@ -2,7 +2,7 @@ Demo-v2: Web services. Ruby running on server side. Front-end polls data on dema
 ==================================================================================
 
 Live demo:
-http://synoptic-svg-demo-v2.herokuapp.com/
+http://synoptic-demo-v2.herokuapp.com/
 
 # Technologies:
 
