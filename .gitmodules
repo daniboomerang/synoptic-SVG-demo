@@ -1,0 +1,3 @@
+[submodule "Demo-v1/src"]
+	path = Demo-v1/src
+	url = https://github.com/synoptics-monitor/monitor-demo-clientOnly
