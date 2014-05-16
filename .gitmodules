@@ -4,3 +4,6 @@
 [submodule "Demo-v2/src"]
 	path = Demo-v2/src
 	url = https://github.com/synoptics-monitor/monitor-demo-REST-API-Sinatra
+[submodule "Demo-v3/src"]
+	path = Demo-v3/src
+	url = https://github.com/synoptics-monitor/monitor-demo-REST-API-nodejs
